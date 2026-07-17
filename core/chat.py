@@ -1,5 +1,6 @@
 import ollama
 from core.personality import SYSTEM_PROMPT
+from core.config import MODEL
 
 
 def ask(user_message):
