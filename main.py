@@ -1,15 +1,14 @@
-import ollama
+from core.kernel import AuraKernel
 from core.router import process
-from core.commands import detect_command
 from database import initialize_database
 from database.profile import (
     get_profile,
     save_profile
 )
 
-from core.chat import ask
-
 initialize_database()
+
+kernel = AuraKernel()
 
 profile = get_profile()
 
@@ -43,4 +42,4 @@ while True:
         print("\nAURA : Sampai jumpa 😊")
         break
 
-    print("\nAURA :", process(user))
+    print("\nAURA :", kernel.process(user))
