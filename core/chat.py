@@ -1,22 +1,29 @@
-import ollama
 from core.personality import SYSTEM_PROMPT
-from core.config import MODEL
+from core.context_builder import build_context
+from core.ai_provider import chat
+
+from services.conversation_service import add
 
 
-def ask(user_message):
+def ask(user_message: str):
 
-    response = ollama.chat(
-        model="gemma3:1b",
-        messages=[
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT
-            },
-            {
-                "role": "user",
-                "content": user_message
-            }
-        ]
-    )
+    context = build_context(user_message)
 
-    return response["message"]["content"]
+    add("User", user_message)
+
+    messages = [
+        {
+            "role": "system",
+            "content": SYSTEM_PROMPT
+        },
+        {
+            "role": "user",
+            "content": context
+        }
+    ]
+
+    answer = chat(messages)
+
+    add("AURA", answer)
+
+    return answer

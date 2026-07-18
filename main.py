@@ -1,6 +1,8 @@
 import ollama
-from memory.database import (
-    initialize_database,
+from core.router import process
+from core.commands import detect_command
+from database import initialize_database
+from database.profile import (
     get_profile,
     save_profile
 )
@@ -41,4 +43,4 @@ while True:
         print("\nAURA : Sampai jumpa 😊")
         break
 
-    print("\nAURA :", ask(user))
+    print("\nAURA :", process(user))
