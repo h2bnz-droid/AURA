@@ -1,0 +1,42 @@
+from core.context import AuraContext
+
+
+class PromptBuilder:
+
+    def build(self, context: AuraContext) -> str:
+
+        prompt = []
+
+        if context.profile:
+            prompt.append(
+                f"Nama pengguna: {context.profile}"
+            )
+
+        if context.memories:
+
+            prompt.append("")
+            prompt.append("Memori relevan:")
+
+            for memory in context.memories:
+
+                prompt.append(
+                    f"- {memory['memory_value']}"
+                )
+
+        if context.history:
+
+            prompt.append("")
+            prompt.append("Percakapan terakhir:")
+
+            for chat in context.history:
+
+                prompt.append(
+                    f"{chat['role']}: {chat['message']}"
+                )
+
+        prompt.append("")
+        prompt.append(
+            f"Pertanyaan pengguna: {context.user_input}"
+        )
+
+        return "\n".join(prompt)

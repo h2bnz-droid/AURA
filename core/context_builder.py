@@ -1,18 +1,18 @@
-from services.memory_service import search
+from core.context import AuraContext
+
 from services.profile_service import owner_name
+from services.memory_service import search
 from services.conversation_service import history
 
 
 def build_context(user_input: str):
 
-    context = []
+    context = AuraContext(user_input)
 
-    name = owner_name()
+    # Profile
+    context.profile = owner_name()
 
-    if name:
-        context.append(f"Nama pengguna: {name}")
-
-    # Cari memori relevan
+    # Memory
     words = user_input.lower().split()
 
     found = []
@@ -20,34 +20,22 @@ def build_context(user_input: str):
     for word in words:
         found.extend(search(word))
 
-    if found:
-        context.append("")
-        context.append("Memori yang relevan:")
+    # Hilangkan duplikasi
+    seen = set()
 
-        # Hilangkan duplikasi
-        seen = set()
+    unique = []
 
-        for memory in found:
+    for memory in found:
 
-            value = memory["memory_value"]
+        value = memory["memory_value"]
 
-            if value not in seen:
-                seen.add(value)
-                context.append(f"- {value}")
+        if value not in seen:
+            seen.add(value)
+            unique.append(memory)
 
-    # Riwayat percakapan
-    chats = history(6)
+    context.memories = unique
 
-    if chats:
-        context.append("")
-        context.append("Percakapan terakhir:")
+    # History
+    context.history = history(6)
 
-        for chat in chats:
-            context.append(
-                f"{chat['role']}: {chat['message']}"
-            )
-
-    context.append("")
-    context.append(f"Pertanyaan pengguna: {user_input}")
-
-    return "\n".join(context)
+    return context

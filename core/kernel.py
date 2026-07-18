@@ -14,9 +14,7 @@ class AuraKernel:
         return response
 
     def before_process(self, message: str):
-        """Hook sebelum request diproses."""
         pass
 
     def after_process(self, message: str, response: str):
-        """Hook setelah response dibuat."""
         pass
