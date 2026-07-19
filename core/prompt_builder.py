@@ -7,36 +7,35 @@ class PromptBuilder:
 
         prompt = []
 
+        prompt.append("==============================")
+        prompt.append("AURA INTERNAL CONTEXT")
+        prompt.append("==============================")
+
         if context.profile:
-            prompt.append(
-                f"Nama pengguna: {context.profile}"
-            )
+            prompt.append("")
+            prompt.append("[PROFILE]")
+            prompt.append(f"Nama: {context.profile}")
 
         if context.memories:
-
             prompt.append("")
-            prompt.append("Memori relevan:")
+            prompt.append("[MEMORY]")
 
             for memory in context.memories:
-
-                prompt.append(
-                    f"- {memory['memory_value']}"
-                )
+                prompt.append(f"- {memory['memory_value']}")
 
         if context.history:
-
             prompt.append("")
-            prompt.append("Percakapan terakhir:")
+            prompt.append("[RECENT CONVERSATION]")
 
             for chat in context.history:
-
                 prompt.append(
                     f"{chat['role']}: {chat['message']}"
                 )
 
         prompt.append("")
-        prompt.append(
-            f"Pertanyaan pengguna: {context.user_input}"
-        )
+        prompt.append("==============================")
+        prompt.append("CURRENT USER MESSAGE")
+        prompt.append("==============================")
+        prompt.append(context.user_input)
 
         return "\n".join(prompt)

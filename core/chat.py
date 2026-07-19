@@ -20,6 +20,15 @@ def ask(user_message: str):
     # Ubah context menjadi prompt
     prompt = builder.build(context)
 
+    from core.config import DEBUG_PROMPT
+
+    if DEBUG_PROMPT:
+        print("\n" + "=" * 60)
+        print("PROMPT DEBUG")
+        print("=" * 60)
+        print(prompt)
+        print("=" * 60)
+
     messages = [
         {
             "role": "system",
