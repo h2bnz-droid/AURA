@@ -1,4 +1,4 @@
-from core.router import process
+from core.router import process_user_input
 
 
 class AuraKernel:
@@ -7,7 +7,7 @@ class AuraKernel:
     def process(self, message: str) -> str:
         self.before_process(message)
 
-        response = process(message)
+        response = process_user_input(message)
 
         self.after_process(message, response)
 

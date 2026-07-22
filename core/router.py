@@ -5,8 +5,15 @@ from services.profile_service import owner_name
 from services.memory_service import remember
 from services.memory_service import recall_all
 from skills.manager import run
+from core.engines.goal_engine import GoalEngine
 
-def process(user_input: str):
+goal_engine = GoalEngine()
+
+def process_user_input(user_input: str) -> str:
+
+    response = goal_engine.process(user_input)
+    if response:
+        return response
 
     # Cek apakah ini memori yang perlu disimpan
     memory = process_memory(user_input)

@@ -47,3 +47,11 @@ def get_recent_conversations(limit=10):
     conn.close()
 
     return list(reversed(rows))
+
+def clear_conversations():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM conversations")
+    conn.commit()
+    conn.close()

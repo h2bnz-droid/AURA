@@ -1,5 +1,7 @@
 from core.kernel import AuraKernel
-from core.router import process
+from core.router import process_user_input
+from core.engines.goal_engine import GoalEngine
+from services.conversation_service import clear_history
 from database import initialize_database
 from database.profile import (
     get_profile,
@@ -9,6 +11,8 @@ from database.profile import (
 initialize_database()
 
 kernel = AuraKernel()
+goal_engine = GoalEngine()
+clear_history()
 
 profile = get_profile()
 
