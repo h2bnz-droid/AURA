@@ -39,3 +39,7 @@ def build_context(user_input: str):
     context.history = history(6)
 
     return context
+
+    memory_engine.retrieve(user_input)
+
+    keywords = set(message.lower().split())

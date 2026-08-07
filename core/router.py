@@ -1,31 +1,21 @@
 from core.chat import ask
 from core.commands import detect_command
-from core.memory_engine import process_memory
-from services.profile_service import owner_name
-from services.memory_service import remember
-from services.memory_service import recall_all
-from skills.manager import run
-from core.engines.goal_engine import GoalEngine
 
-goal_engine = GoalEngine()
+from core.engines.engine_manager import EngineManager
+
+from services.profile_service import owner_name
+from services.memory_service import recall_all
+
+from skills.manager import run
+
+engine_manager = EngineManager()
 
 def process_user_input(user_input: str) -> str:
-
-    response = goal_engine.process(user_input)
+    
+    # Semua engine diproses di sini
+    response = engine_manager.process(user_input)
     if response:
         return response
-
-    # Cek apakah ini memori yang perlu disimpan
-    memory = process_memory(user_input)
-
-    if memory:
-        remember(
-            memory["category"],
-            memory["key"],
-            memory["value"]
-        )
-
-        return "Baik. Aku sudah mengingatnya."
 
     # Cek command lain
     command = detect_command(user_input)
@@ -47,4 +37,5 @@ def process_user_input(user_input: str) -> str:
         return skill
 
     # Selain itu kirim ke AI
-    return ask(user_input)
+    return ask(user_input)    
+

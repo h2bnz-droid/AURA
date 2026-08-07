@@ -6,17 +6,11 @@ def create_table():
     cursor = conn.cursor()
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS goals (
+    CREATE TABLE IF NOT EXISTS memories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        description TEXT,
         category TEXT,
-        status TEXT,
-        priority INTEGER,
-        progress INTEGER,
-        created_at TEXT,
-        updated_at TEXT,
-        target_date TEXT
+        memory_key TEXT,
+        memory_value TEXT
     );
     """)
 

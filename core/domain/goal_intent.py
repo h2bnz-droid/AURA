@@ -1,12 +1,12 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class GoalIntent(Enum):
     """Intent yang berkaitan dengan Goal pengguna."""
 
-    CREATE = "create"
-    UPDATE = "update"
-    COMPLETE = "complete"
-    ABANDON = "abandon"
-    SHOW = "show"
-    UNKNOWN = "unknown"
+    CREATE = auto()
+    UPDATE = auto()
+    COMPLETE = auto()
+    ABANDON = auto()
+    SHOW = auto()
+    UNKNOWN = auto()

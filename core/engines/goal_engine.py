@@ -1,128 +1,97 @@
-from core.domain.goal_intent import GoalIntent
-from services.goal_service import (
-    add_goal,
-    active_goals
-)
+import re
 
-class GoalEngine:
-    """Engine untuk menganalisis dan mengelola tujuan pengguna."""
+from core.domain.goal_intent import GoalIntent
+from services.goal_service import active_goals, add_goal, abandon, find_active_goal, finish_goal, set_progress
+from core.engines.base_engine import BaseEngine
+
+class GoalEngine(BaseEngine):
+    """Mengelola tujuan pengguna dengan perintah Bahasa Indonesia sederhana."""
+
+    CREATE_PREFIXES = ("aku ingin ", "saya ingin ", "ingin ", "mau ", "bertekad ", "target ", "cita-cita ", "goal ")
+    SHOW_PATTERNS = ("goal saya", "goals saya", "goalku", "target saya", "tujuan saya", "lihat goal")
+    UPDATE_PREFIXES = ("update goal ", "progres goal ", "kemajuan goal ")
+    COMPLETE_PREFIXES = ("selesaikan goal ", "selesai goal ", "tuntaskan goal ", "goal selesai ")
+    ABANDON_PREFIXES = ("batalkan goal ", "berhenti goal ", "tinggalkan goal ")
 
     def analyze(self, message: str) -> GoalIntent:
-        """Mendeteksi intent terkait goal dari pesan pengguna."""
-
-        text = message.lower()
-
-        #Menampilkan goal
-        if any(word in text for word in [
-            "goal saya",
-            "target saya",
-            "tujuan saya",
-            "apa goal",
-            "goals saya",
-            "goals-ku",
-            "goalku"
-        ]):
+        text = message.strip().casefold()
+        if any(pattern in text for pattern in self.SHOW_PATTERNS):
             return GoalIntent.SHOW
-
-        # Membuat goal baru
-        if any(word in text for word in [
-            "ingin",
-            "mau",
-            "bertekad",
-            "target",
-            "cita-cita",
-        ]):
-            return GoalIntent.CREATE
-
-        # Update progress
-        if any(word in text for word in [
-            "sedang",
-            "progres",
-            "kemajuan",
-            "lanjut",
-            "update"
-        ]):
-            return GoalIntent.UPDATE
-
-        # Goal selesai
-        if any(word in text for word in [
-            "selesai",
-            "berhasil",
-            "lulus",
-            "tercapai"
-        ]):
+        if any(text.startswith(prefix) for prefix in self.COMPLETE_PREFIXES):
             return GoalIntent.COMPLETE
-
-        # Goal dibatalkan
-        if any(word in text for word in [
-            "batal",
-            "berhenti",
-            "menyerah"
-        ]):
+        if any(text.startswith(prefix) for prefix in self.ABANDON_PREFIXES):
             return GoalIntent.ABANDON
-
+        if self._parse_progress(text):
+            return GoalIntent.UPDATE
+        if any(text.startswith(prefix) for prefix in self.CREATE_PREFIXES):
+            return GoalIntent.CREATE
         return GoalIntent.UNKNOWN
-    
-    def extract_title(self, message: str) -> str:
-        """Mengekstrak judul goal dari pesan pengguna."""
-        # Implementasi sederhana untuk mengekstak judul goal dari pesan. 
-        # Bisa dilakukan dengan mencari kata-kata yang menunjukkan tujuan atau goal.
-        # Contoh implementasi sederhana:
-        text = message.strip()
 
-        prefixes = [
-            "aku ingin",
-            "saya ingin",
-            "ingin",
-            "mau",
-            "bertekad",
-            "target",
-            "cita-cita",
-            "goal"
-        ]
-        
-        lower = text.lower()
+    @staticmethod
+    def _strip_prefix(text: str, prefixes: tuple[str, ...]) -> str:
+        lowered = text.casefold()
         for prefix in prefixes:
-            if lower.startswith(prefix):
-                return text[len(prefix):].strip()
-        return text
-    
-    def process(self, message: str) -> str | None:
+            if lowered.startswith(prefix):
+                return text[len(prefix):].strip(" .")
+        return text.strip(" .")
 
+    def extract_goal(self, message: str) -> str:
+        return self._strip_prefix(message.strip(), self.CREATE_PREFIXES)
+
+    @staticmethod
+    def _parse_progress(message: str):
+        match = re.match(r"(?:update|progres|kemajuan)\\s+(?:goal\\s+)?(.+?)\\s+(?:menjadi\\s+)?(\\d{1,3})%?$", message.strip(), re.IGNORECASE)
+        if not match:
+            return None
+        title, progress = match.groups()
+        value = int(progress)
+        return (title.strip(" ."), value) if 0 <= value <= 100 else None
+
+    def validate_goal(self, title: str) -> bool:
+        if not title or len(title.strip()) < 3:
+            return False
+        return True
+
+    def process(self, message: str) -> str | None:
         intent = self.analyze(message)
 
         if intent == GoalIntent.CREATE:
+            title = self.extract_goal(message)
+            if not self.validate_goal(title):
+                return "Ceritakan tujuanmu sedikit lebih jelas agar bisa aku catat."
+            add_goal(title)
+            return f'Baik, aku sudah menambahkan tujuan "{title}". Langkah kecil pertama apa yang realistis kamu lakukan hari ini?'
 
-            title = self.extract_title(message)
-            DEFAULT_DESCRIPTION = "Deskripsi goal belum ditentukan."
-            DEFAULT_CATEGORY = "General"
-            DEFAULT_PRIORITY = 1
-            target_date = None  # Bisa diubah sesuai kebutuhan
-
-            add_goal(
-                title,
-                DEFAULT_DESCRIPTION,
-                DEFAULT_CATEGORY,
-                DEFAULT_PRIORITY,
-                target_date
-            )
-            return f'Baik, aku sudah menambahkan goal "{title}".'
-        
         if intent == GoalIntent.SHOW:
-
             goals = active_goals()
-            
             if not goals:
-                return "Saat ini kamu belum memiliki goal aktif."
-            
-            lines = ["Berikut adalah goal aktifmu:"]
+                return "Saat ini kamu belum memiliki tujuan aktif. Ceritakan satu hal yang ingin kamu capai."
+            return "\\n".join(["Tujuan aktifmu:"] + [f"{index}. {goal['title']} — {goal['progress']}%" for index, goal in enumerate(goals, 1)])
 
-            for i, goal in enumerate(goals, start=1):
-                lines.append(f"{i}. {goal['title']} - Progress: {goal['progress']}%"
-                )
-            return "\n".join(lines)
+        if intent == GoalIntent.UPDATE:
+            title, progress = self._parse_progress(message)
+            goal = find_active_goal(title)
+            if not goal:
+                return f'Aku tidak menemukan tujuan aktif "{title}". Ketik "goal saya" untuk melihat daftarnya.'
+            set_progress(goal["id"], progress)
+            if progress == 100:
+                finish_goal(goal["id"])
+                return f'Hebat, tujuan "{goal["title"]}" sudah selesai! Luangkan sejenak untuk merayakan kemajuanmu.'
+            return f'Progress "{goal["title"]}" sudah diperbarui menjadi {progress}%. Apa langkah kecil berikutnya?'
 
-    def normalize_title(title: str) -> str:
-        return " ".join(word.capitalize() for word in title.split())
-        
+        if intent in (GoalIntent.COMPLETE, GoalIntent.ABANDON):
+            prefixes = self.COMPLETE_PREFIXES if intent == GoalIntent.COMPLETE else self.ABANDON_PREFIXES
+            title = self._strip_prefix(message, prefixes)
+            goal = find_active_goal(title)
+            if not goal:
+                return f'Aku tidak menemukan tujuan aktif "{title}". Ketik "goal saya" untuk melihat daftarnya.'
+            if intent == GoalIntent.COMPLETE:
+                finish_goal(goal["id"])
+                return f'Selamat, tujuan "{goal["title"]}" sudah ditandai selesai.'
+            abandon(goal["id"])
+            return f'Tujuan "{goal["title"]}" sudah dihentikan. Tidak apa-apa mengubah arah saat kondisimu berubah.'
+
         return None
+
+    def get_goals(self):
+        return active_goals()

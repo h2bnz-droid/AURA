@@ -57,7 +57,7 @@ def update_progress(goal_id, progress):
     cursor = conn.cursor()
     cursor.execute("""
            UPDATE goals
-           SET progress = ?
+           SET progress = ?, updated_at = CURRENT_TIMESTAMP
            WHERE id = ?
     """, (progress, goal_id))
     conn.commit()
@@ -69,8 +69,52 @@ def complete_goal(goal_id):
    cursor.execute("""
         UPDATE goals
         SET status = 'completed',
-        progress = 100
+        progress = 100,
+        updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
     """, (goal_id,))
    conn.commit()
    conn.close()
+
+def abandon_goal(goal_id):
+   conn = get_connection()
+   cursor = conn.cursor()
+   cursor.execute("""
+        UPDATE goals
+        SET status = 'abandoned', updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+   """, (goal_id,))
+   conn.commit()
+   conn.close()
+
+def find_goal_by_title(title):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM goals
+        WHERE title = ?
+    """, (title,))
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    return row
+
+def get_goal(goal_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM goals
+        WHERE id = ?
+    """, (goal_id,))
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    return row
