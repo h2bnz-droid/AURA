@@ -13,7 +13,7 @@ class ProfileEngine(BaseEngine):
         text = message.lower()
 
         if text.startswith("namaku ") or text.startswith("nama saya "):
-            return ProfileIntent.SET_NAME
+            return ProfileIntent.CREATE
 
         return ProfileIntent.UNKNOWN
 
@@ -53,7 +53,7 @@ class ProfileEngine(BaseEngine):
 
         intent = self.analyze(message)
 
-        if intent != ProfileIntent.SET_NAME:
+        if intent != ProfileIntent.CREATE:
             return None
 
         name = self.extract_name(message)

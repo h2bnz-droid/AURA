@@ -1,69 +1,71 @@
 # Changelog
 
-## v0.1.0 — Foundation
+## v0.2.0 — Intelligence Expansion
 
-Release Date: 2026-08-07
+Release Date: 2026-08-08
 
 ### Added
 
-#### Core Architecture
-
-- AuraKernel
-- Router Architecture
-- Engine Manager
-- BaseEngine
-- Domain Intent System
-- AI Provider (Ollama)
-- Prompt Builder
-- Context Builder
-
 #### Engines
 
-- ProfileEngine
-- MemoryEngine
-- GoalEngine
-- ReflectionEngine
+* PlannerEngine
+* DecisionEngine
+* KnowledgeEngine
+* ConversationEngine
 
-#### Services
+#### Domain Intent System
 
-- Profile Service
-- Memory Service
-- Goal Service
-- Reflection Service
+* PlannerIntent
+* DecisionIntent
+* KnowledgeIntent
+* ConversationIntent
 
-#### Database
+#### Planner System
 
-- Profile Database
-- Memory Database
-- Goal Database
-- Reflection Database
+* Planner Service
+* Planner Database
+* Plan persistence
+* Plan generation
 
-#### Features
+#### Engine Integration
 
-- User Profile Management
-- Persistent Memory
-- Goal Management
-- Reflection System
-- Conversation History
+* Sprint 2 engines integrated into Engine Manager
+* ConversationEngine fallback behavior
 
 ### Improved
 
-- Consistent Engine architecture
-- Standardized Service layer
-- SQLite integration
-- Type hints
-- Unit tests
-- Modular project structure
+* Expanded Engine Manager capabilities
+* Consistent Engine architecture across Sprint 2 engines
+* Consistent intent-based processing
+* Planner persistence through Service and Database layers
+* Query extraction and validation in KnowledgeEngine
+* Engine integration testing
+* Regression test coverage
+
+### Testing
+
+* PlannerEngine unit tests
+* PlannerService unit tests
+* Planner integration test
+* DecisionEngine unit tests
+* KnowledgeEngine unit tests
+* ConversationEngine unit tests
+* EngineManager integration tests
+* Full regression test suite
+
+Final test result:
+
+```text
+50 passed
+```
 
 ### Documentation
 
-- AURA Manifesto
-- Architecture.md
-- Philosophy.md
-- Initial Roadmap
+* Sprint 2 documentation
+* Sprint 2 architecture and integration notes
 
 ### Notes
 
-This release establishes the architectural foundation of AURA.
+This release expands AURA beyond its foundational architecture into additional cognitive capabilities.
 
-Sprint 1 focused on building a modular and maintainable architecture that will support future cognitive systems such as PlannerEngine, DecisionEngine, KnowledgeEngine, and ConversationEngine.
+Sprint 2 introduces planning, decision making, knowledge interaction, and general conversation while maintaining the modular Engine, Service, and Database architecture established in Sprint 1.
