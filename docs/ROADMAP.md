@@ -8,7 +8,7 @@ AURA dikembangkan sebagai AI Companion dengan arsitektur modular yang dapat berk
 
 ## Milestone 1 — Foundation
 
-## Status: Completed*
+**Status:** Completed
 
 Milestone pertama berfokus pada pembangunan fondasi arsitektur AURA.
 
@@ -56,7 +56,7 @@ Milestone pertama berfokus pada pembangunan fondasi arsitektur AURA.
 
 ## Milestone 2 — Intelligence Expansion
 
-## Status: Completed
+**Status:** Completed
 
 Milestone kedua memperluas kemampuan AURA dengan sistem perencanaan, pengambilan keputusan, pengetahuan, dan percakapan.
 
@@ -108,31 +108,72 @@ Sprint 2 selesai dengan:
 
 ---
 
+---
+
 ## Milestone 3 — Cognitive Systems
 
-## Status: Planned
+**Status:** Planned
 
 Milestone ketiga berfokus pada pengembangan kemampuan kognitif AURA yang lebih dalam.
 
-### Planned Systems
+### Sprint 3 — Context Intelligence
 
-* [ ] Advanced planning
-* [ ] Decision reasoning
-* [ ] Knowledge system
-* [ ] Learning system
-* [ ] Emotion awareness
-* [ ] Improved reflection
-* [ ] Context-aware conversation
+**Status:** Completed
 
-### Planned Engines
+Sprint ketiga berfokus pada pembangunan contextual intelligence layer yang menghubungkan input pengguna, memory retrieval, context construction, prompt generation, dan AI pipeline.
 
-* [ ] LearningEngine
-* [ ] EmotionEngine
-* [ ] SecurityEngine
+### Context
 
-Engine tambahan dapat ditambahkan berdasarkan kebutuhan sistem dan hasil evaluasi milestone sebelumnya.
+* [x] AuraContext
+* [x] Context Builder
+* [x] Profile context
+* [x] Recent conversation context
+* [x] Current user message context
 
----
+### Memory Retrieval
+
+* [x] Dedicated MemoryRetrieval
+* [x] Memory normalization
+* [x] Keyword-based retrieval
+* [x] Memory deduplication
+* [x] Memory relevance scoring
+* [x] Memory ranking
+* [x] Maximum memory result limit
+
+### Prompt Pipeline
+
+* [x] Context-to-prompt integration
+* [x] Profile prompt section
+* [x] Memory prompt section
+* [x] Recent conversation prompt section
+* [x] Current user message section
+* [x] Empty context handling
+
+## Integration*
+
+* [x] Chat pipeline integration
+* [x] Router integration
+* [x] Context/prompt integration
+* [x] Full pipeline integration
+
+## Quality*
+
+* [x] Context Builder tests
+* [x] Memory Retrieval tests
+* [x] Prompt Builder tests
+* [x] Chat tests
+* [x] Router tests
+* [x] Integration tests
+* [x] Full regression testing
+
+````markdown
+### Result
+
+Sprint 3 selesai dengan:
+
+```text
+82 passed
+```
 
 ## Milestone 4 — Personal Cognitive Assistant
 
@@ -195,6 +236,7 @@ Milestone 5 — AURA Maturity
 | ------- | ---------------------- | --------- |
 | v0.1.0  | Foundation             | Completed |
 | v0.2.0  | Intelligence Expansion | Completed |
+| v0.3.0  | Context Intelligence   | Completed |
 
 ## Development Principle
 

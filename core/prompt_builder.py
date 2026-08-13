@@ -39,5 +39,3 @@ class PromptBuilder:
         prompt.append(context.user_input)
 
         return "\n".join(prompt)
-    
-        profile = profile_engine.get_profile()

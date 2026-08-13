@@ -1,45 +1,23 @@
 from core.context import AuraContext
+from core.memory_retrieval import MemoryRetrieval
 
 from services.profile_service import owner_name
-from services.memory_service import search
 from services.conversation_service import history
 
 
-def build_context(user_input: str):
+memory_retrieval = MemoryRetrieval()
 
+
+def build_context(user_input: str) -> AuraContext:
     context = AuraContext(user_input)
 
     # Profile
     context.profile = owner_name()
 
-    # Memory
-    words = user_input.lower().split()
+    # Relevant memories
+    context.memories = memory_retrieval.retrieve(user_input)
 
-    found = []
-
-    for word in words:
-        found.extend(search(word))
-
-    # Hilangkan duplikasi
-    seen = set()
-
-    unique = []
-
-    for memory in found:
-
-        value = memory["memory_value"]
-
-        if value not in seen:
-            seen.add(value)
-            unique.append(memory)
-
-    context.memories = unique
-
-    # History
+    # Recent conversation
     context.history = history(6)
 
     return context
-
-    memory_engine.retrieve(user_input)
-
-    keywords = set(message.lower().split())
