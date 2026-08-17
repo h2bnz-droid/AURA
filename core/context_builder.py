@@ -3,7 +3,7 @@ from core.memory_retrieval import MemoryRetrieval
 
 from services.profile_service import owner_name
 from services.conversation_service import history
-
+from services.emotion_service import latest_emotion
 
 memory_retrieval = MemoryRetrieval()
 
@@ -19,5 +19,8 @@ def build_context(user_input: str) -> AuraContext:
 
     # Recent conversation
     context.history = history(6)
+
+    # Current emotion
+    context.emotion = latest_emotion()
 
     return context

@@ -23,6 +23,16 @@ class PromptBuilder:
             for memory in context.memories:
                 prompt.append(f"- {memory['memory_value']}")
 
+        if context.emotion:
+            prompt.append("")
+            prompt.append("[EMOTION]")
+            prompt.append(
+                f"Emosi terakhir: {context.emotion['emotion']}"
+            )
+            prompt.append(
+                f"Intensitas: {context.emotion['intensity']}"
+            )
+
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")

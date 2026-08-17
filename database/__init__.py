@@ -3,6 +3,7 @@ from database.memories import create_table as create_memory_table
 from database.conversations import create_table as create_conversation_table
 from database.goals import create_table as create_goal_table
 from database.learning import create_table as create_learning_table
+from database.emotions import create_table as create_emotion_table
 
 def initialize_database():
     print(">>> Initializing database...")
@@ -21,3 +22,6 @@ def initialize_database():
 
     create_learning_table()
     print("Learning OK")
+
+    create_emotion_table()
+    print("Emotions OK")
