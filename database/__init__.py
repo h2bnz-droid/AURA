@@ -2,7 +2,7 @@ from database.profile import create_table as create_profile_table
 from database.memories import create_table as create_memory_table
 from database.conversations import create_table as create_conversation_table
 from database.goals import create_table as create_goal_table
-
+from database.learning import create_table as create_learning_table
 
 def initialize_database():
     print(">>> Initializing database...")
@@ -18,3 +18,6 @@ def initialize_database():
 
     create_goal_table()
     print("Goals OK")
+
+    create_learning_table()
+    print("Learning OK")
