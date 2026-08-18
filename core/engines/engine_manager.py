@@ -6,6 +6,7 @@ from core.engines.decision_engine import DecisionEngine
 from core.engines.knowledge_engine import KnowledgeEngine
 from core.engines.learning_engine import LearningEngine
 from core.engines.emotion_engine import EmotionEngine
+from core.engines.temporal_engine import TemporalEngine
 from core.engines.conversation_engine import ConversationEngine
 
 
@@ -21,6 +22,7 @@ class EngineManager:
             KnowledgeEngine(),
             LearningEngine(),
             EmotionEngine(),
+            TemporalEngine(),
             ConversationEngine(),
         ]
 

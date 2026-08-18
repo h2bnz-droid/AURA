@@ -33,6 +33,16 @@ class PromptBuilder:
                 f"Intensitas: {context.emotion['intensity']}"
             )
 
+        if context.temporal:
+            prompt.append("")
+            prompt.append("[TEMPORAL CONTEXT]")
+
+            for event in context.temporal:
+                prompt.append(
+                    f"- {event['event_type']}: "
+                    f"{event['subject']} = {event['value']}"
+                )
+
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")
