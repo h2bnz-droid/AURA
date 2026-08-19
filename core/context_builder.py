@@ -6,6 +6,7 @@ from services.conversation_service import history
 from services.emotion_service import latest_emotion
 from services.temporal_service import event_history
 from services.reflection_service import latest
+from services.relationship_service import get_all_relationships
 
 memory_retrieval = MemoryRetrieval()
 
@@ -30,5 +31,7 @@ def build_context(user_input: str) -> AuraContext:
 
     #Recent reflections
     context.reflections = latest()
+
+    context.relationships = get_all_relationships()
 
     return context

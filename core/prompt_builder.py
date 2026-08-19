@@ -52,6 +52,16 @@ class PromptBuilder:
                     f"- {reflection['summary']}"
                 )
 
+        if context.relationships:
+            prompt.append("")
+            prompt.append("[RELATIONSHIP]")
+
+            for relationship in context.relationships:
+                prompt.append(
+                    f"- {relationship['person_name']}: "
+                    f"{relationship['relationship_type']}"
+                )
+
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")

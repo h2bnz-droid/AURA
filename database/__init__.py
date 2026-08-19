@@ -6,6 +6,7 @@ from database.learning import create_table as create_learning_table
 from database.emotions import create_table as create_emotion_table
 from database.temporal import create_table as create_temporal_table
 from database.reflections import create_table as create_reflection_table
+from database.relationships import create_table as create_relationship_table
 
 
 def initialize_database():
@@ -31,3 +32,6 @@ def initialize_database():
 
     create_reflection_table()
     print("Reflections OK")
+
+    create_relationship_table()
+    print("Relationships OK")

@@ -8,6 +8,7 @@ from core.engines.learning_engine import LearningEngine
 from core.engines.emotion_engine import EmotionEngine
 from core.engines.temporal_engine import TemporalEngine
 from core.engines.reflection_engine import ReflectionEngine
+from core.engines.relationship_engine import RelationshipEngine
 from core.engines.conversation_engine import ConversationEngine
 
 
@@ -25,6 +26,7 @@ class EngineManager:
             EmotionEngine(),
             TemporalEngine(),
             ReflectionEngine(),
+            RelationshipEngine(),
             ConversationEngine(),
         ]
 
