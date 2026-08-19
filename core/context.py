@@ -7,5 +7,6 @@ class AuraContext:
         self.history = []
         self.emotion = None
         self.temporal = []
+        self.reflections = []
 
         self.response = None

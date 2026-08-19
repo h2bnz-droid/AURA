@@ -1,18 +1,10 @@
-from enum import Enum, auto
+from core.domain.reflection_intent import ReflectionIntent
+from core.engines.base_engine import BaseEngine
+
 from services.profile_service import get_profile
 from services.memory_service import recall_all
 from services.goal_service import active_goals
-from services.reflection_service import latest
-from services.reflection_service import save
-from services.reflection_service import name
-from core.engines.base_engine import BaseEngine
-
-class ReflectionIntent(Enum):
-    """Mengelola refleksi pengguna dengan perintah Bahasa Indonesia sederhana."""
-
-    REFLECT = auto()
-    SHOW_REFLECTIONS = auto()
-    UNKNOWN_INTENT = auto()
+from services.reflection_service import latest, save
 
 class ReflectionEngine(BaseEngine):
     REFLECT_PREFIXES = ("aku ingin merenung", "aku ingin refleksi", "mau refleksi", "mau merenung")
@@ -47,28 +39,54 @@ class ReflectionEngine(BaseEngine):
         }
 
     def generate_reflection(self, context: dict) -> dict[str, str]:
+        profile = context["profile"]
         memory = context["memory"]
         goals = context["goals"]
 
+        user_name = profile["name"] if profile else "Kamu"
+
         if not goals:
             return {
-                
-                "summary": f"{name}, Kamu belum memiliki tujuan yang tercatat. Cobalah untuk menetapkan tujuan terlebih dahulu agar aku bisa membantumu merenung.",
-                "insights": "Beberapa wawasan yang bisa diambil dari pengalamanmu",
-                "questions": "Pertanyaan reflektif untuk membantu kamu merenung lebih dalam"
+                "summary": (
+                    f"{user_name}, kamu belum memiliki tujuan yang tercatat. "
+                    "Cobalah menetapkan tujuan terlebih dahulu agar refleksi "
+                    "bisa lebih terarah."
+                ),
+                "insights": (
+                    "Belum ada tujuan yang cukup untuk dianalisis."
+                ),
+                "questions": (
+                    "Apa tujuan yang ingin kamu capai saat ini?"
+                ),
             }
 
-        if goals and not memory:
+        if not memory:
             return {
-                "summary": f"{name}, Kamu memiliki tujuan yang tercatat, tetapi belum ada catatan pengalaman yang tersimpan. Cobalah untuk mencatat pengalamanmu terlebih dahulu agar aku bisa membantumu merenung.",
-                "insights": "Beberapa wawasan yang bisa diambil dari pengalamanmu",
-                "questions": "Pertanyaan reflektif untuk membantu kamu merenung lebih dalam"
+                "summary": (
+                    f"{user_name}, kamu memiliki tujuan yang tercatat, "
+                    "tetapi belum ada catatan pengalaman yang tersimpan."
+                ),
+                "insights": (
+                    "Catatan pengalaman akan membantu menghubungkan tujuan "
+                    "dengan perkembanganmu."
+                ),
+                "questions": (
+                    "Pengalaman apa yang paling berpengaruh terhadap tujuanmu?"
+                ),
             }
 
         return {
-            "summary": f"{name}, Berdasarkan catatan pengalaman dan tujuanmu, berikut adalah refleksi yang bisa aku berikan: ...",
-            "insights": "Beberapa wawasan yang bisa diambil dari pengalaman dan tujuanmu",
-            "questions": "Pertanyaan reflektif untuk membantu kamu merenung lebih dalam"
+            "summary": (
+                f"{user_name}, berdasarkan catatan pengalaman dan tujuanmu, "
+                "berikut refleksi awal yang bisa kamu pertimbangkan."
+            ),
+            "insights": (
+                "Pengalaman yang tersimpan dapat digunakan untuk melihat "
+                "hubungan antara pengalaman dan tujuan."
+            ),
+            "questions": (
+                "Apa yang sudah berjalan baik, dan apa yang ingin kamu perbaiki?"
+            ),
         }
 
     def process(self, message: str) -> str | None:
@@ -106,3 +124,11 @@ class ReflectionEngine(BaseEngine):
 
     def latest_reflections(self):
         return latest()
+
+    def test_reflection_engine_process_reflect():
+        engine = ReflectionEngine()
+
+        result = engine.process("aku ingin refleksi")
+
+        assert result is not None
+        assert "Refleksi berdasarkan" in result

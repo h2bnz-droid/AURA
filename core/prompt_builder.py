@@ -43,6 +43,15 @@ class PromptBuilder:
                     f"{event['subject']} = {event['value']}"
                 )
 
+        if context.reflections:
+            prompt.append("")
+            prompt.append("[REFLECTION]")
+
+            for reflection in context.reflections:
+                prompt.append(
+                    f"- {reflection['summary']}"
+                )
+
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")
