@@ -8,6 +8,7 @@ from services.temporal_service import event_history
 from services.reflection_service import latest
 from services.relationship_service import get_all_relationships
 from services.cognitive_model_service import get_all
+from services.long_term_context_service import collect_long_term_context
 
 memory_retrieval = MemoryRetrieval()
 
@@ -39,4 +40,25 @@ def build_context(user_input: str) -> AuraContext:
     # Personal cognitive Model
     context.cognitive_model = get_all()
 
+    long_term_context = collect_long_term_context()
+
+    context.long_term_context = [
+        _normalize_long_term_context_item(item)
+        for item in long_term_context
+    ]
+
     return context
+
+def _normalize_long_term_context_item(item):
+    if isinstance(item, dict):
+        return item
+
+    return {
+        "content": item.content,
+        "category": item.category,
+        "source": item.source,
+        "confidence": item.confidence,
+        "relevance": item.relevance,
+        "created_at": item.created_at,
+        "updated_at": item.updated_at,
+    }

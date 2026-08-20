@@ -72,6 +72,15 @@ class PromptBuilder:
                     f"{attribute['attribute_value']}"
                 )
 
+        if context.long_term_context:
+            prompt.append("")
+            prompt.append("[LONG-TERM CONTEXT]")
+
+            for item in context.long_term_context:
+                prompt.append(
+                    f"- {item['content']}"
+                )
+
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")

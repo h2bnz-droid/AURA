@@ -10,5 +10,6 @@ class AuraContext:
         self.reflections = []
         self.relationships = []
         self.cognitive_model = ()
+        self.long_term_context = []
 
         self.response = None
