@@ -62,6 +62,16 @@ class PromptBuilder:
                     f"{relationship['relationship_type']}"
                 )
 
+        if context.cognitive_model:
+            prompt.append("")
+            prompt.append("[PERSONAL COGNITIVE MODEL]")
+
+            for attribute in context.cognitive_model:
+                prompt.append(
+                    f"- {attribute['attribute_name']}: "
+                    f"{attribute['attribute_value']}"
+                )
+
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")

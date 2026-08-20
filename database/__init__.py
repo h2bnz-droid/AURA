@@ -7,6 +7,9 @@ from database.emotions import create_table as create_emotion_table
 from database.temporal import create_table as create_temporal_table
 from database.reflections import create_table as create_reflection_table
 from database.relationships import create_table as create_relationship_table
+from database.personal_cognitive_model import (
+    create_table as create_personal_cognitive_model_table,
+)
 
 
 def initialize_database():
@@ -35,3 +38,6 @@ def initialize_database():
 
     create_relationship_table()
     print("Relationships OK")
+
+    create_personal_cognitive_model_table()
+    print("Personal Cognitive Model OK")

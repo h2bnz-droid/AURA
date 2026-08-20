@@ -9,5 +9,6 @@ class AuraContext:
         self.temporal = []
         self.reflections = []
         self.relationships = []
+        self.cognitive_model = ()
 
         self.response = None
