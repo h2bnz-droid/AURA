@@ -9,9 +9,14 @@ from services.reflection_service import latest
 from services.relationship_service import get_all_relationships
 from services.cognitive_model_service import get_all
 from services.long_term_context_service import collect_long_term_context
+from services.integrated_cognitive_context_service import (
+    IntegratedCognitiveContextService,
+)
 
 memory_retrieval = MemoryRetrieval()
-
+integrated_cognitive_context_service = (
+    IntegratedCognitiveContextService()
+)
 
 def build_context(user_input: str) -> AuraContext:
     context = AuraContext(user_input)
@@ -47,6 +52,10 @@ def build_context(user_input: str) -> AuraContext:
         for item in long_term_context
     ]
 
+    context.integrated_cognitive_context = (
+    build_integrated_cognitive_context(user_input)
+    )
+
     return context
 
 def _normalize_long_term_context_item(item):
@@ -62,3 +71,6 @@ def _normalize_long_term_context_item(item):
         "created_at": item.created_at,
         "updated_at": item.updated_at,
     }
+
+def build_integrated_cognitive_context(user_input: str):
+    return integrated_cognitive_context_service.build()

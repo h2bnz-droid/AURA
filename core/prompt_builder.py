@@ -81,6 +81,18 @@ class PromptBuilder:
                     f"- {item['content']}"
                 )
 
+        if context.integrated_cognitive_context:
+            items = context.integrated_cognitive_context.all_items()
+
+            if items:
+                prompt.append("")
+                prompt.append("[INTEGRATED COGNITIVE CONTEXT]")
+
+                for item in items:
+                    prompt.append(
+                        f"- {item.category}: {item.value}"
+                    )        
+
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")
