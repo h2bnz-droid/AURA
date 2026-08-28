@@ -12,10 +12,16 @@ from services.long_term_context_service import collect_long_term_context
 from services.integrated_cognitive_context_service import (
     IntegratedCognitiveContextService,
 )
+from services.adaptive_personalization_service import (
+    AdaptivePersonalizationService,
+)
 
 memory_retrieval = MemoryRetrieval()
 integrated_cognitive_context_service = (
     IntegratedCognitiveContextService()
+)
+adaptive_personalization_service = (
+    AdaptivePersonalizationService()
 )
 
 def build_context(user_input: str) -> AuraContext:
@@ -53,7 +59,11 @@ def build_context(user_input: str) -> AuraContext:
     ]
 
     context.integrated_cognitive_context = (
-    build_integrated_cognitive_context(user_input)
+        build_integrated_cognitive_context(user_input)
+    )
+
+    context.personalization = (
+        adaptive_personalization_service.build_context()
     )
 
     return context

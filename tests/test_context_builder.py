@@ -97,3 +97,9 @@ def test_build_context_requests_six_history_items(monkeypatch):
     build_context("Halo")
 
     assert captured["limit"] == 6
+
+def test_build_context_includes_personalization():
+    context = build_context("hello")
+
+    assert hasattr(context, "personalization")
+    assert isinstance(context.personalization, dict)

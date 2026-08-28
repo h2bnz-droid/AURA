@@ -72,6 +72,15 @@ class PromptBuilder:
                     f"{attribute['attribute_value']}"
                 )
 
+        if context.personalization:
+            prompt.append("")
+            prompt.append("[PERSONALIZATION]")
+
+            for name, value in context.personalization.items():
+                prompt.append(
+                    f"- {name}: {value}"
+                )
+
         if context.long_term_context:
             prompt.append("")
             prompt.append("[LONG-TERM CONTEXT]")

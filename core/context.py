@@ -12,5 +12,6 @@ class AuraContext:
         self.cognitive_model = ()
         self.long_term_context = []
         self.integrated_cognitive_context = None
+        self.personalization = None
 
         self.response = None
