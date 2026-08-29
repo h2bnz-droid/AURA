@@ -30,9 +30,27 @@ class EngineManager:
             ConversationEngine(),
         ]
 
-    def process(self, message: str) -> str | None:
+    def process(
+        self,
+        message: str,
+        context=None,
+    ) -> str | None:
+
         for engine in self.engines:
-            response = engine.process(message)
+
+            # Engine yang sudah mendukung context
+            if (
+                context is not None
+                and hasattr(engine, "process_with_context")
+            ):
+                response = engine.process_with_context(
+                    message,
+                    context,
+                )
+
+            # Engine lama tetap menggunakan kontrak lama
+            else:
+                response = engine.process(message)
 
             if response:
                 return response

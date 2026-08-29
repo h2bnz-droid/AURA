@@ -98,3 +98,70 @@ def test_process_invalid_goal():
         "Tujuan yang diberikan tidak valid."
         " Silakan berikan tujuan yang lebih jelas."
     )
+
+def test_process_with_context_keeps_existing_behavior():
+    engine = PlannerEngine()
+
+    context = {
+        "profile": "Hibban",
+        "personalization": {
+            "response_style": "casual",
+        },
+    }
+
+    with patch(
+        "core.engines.planner_engine.save_plan"
+    ) as mock_save_plan:
+        result = engine.process_with_context(
+            "buat rencana untuk belajar Python",
+            context,
+        )
+
+    assert result is not None
+    assert "belajar Python" in result
+
+    mock_save_plan.assert_called_once_with(
+        "belajar Python",
+        [
+            "Langkah pertama",
+            "Langkah kedua",
+            "Langkah ketiga",
+        ],
+    )    
+
+def test_process_with_context_uses_personalization():
+    engine = PlannerEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "formal",
+        }
+    }
+
+    with patch(
+        "core.engines.planner_engine.save_plan"
+    ):
+        result = engine.process_with_context(
+            "buat rencana untuk belajar Python",
+            context,
+        )
+
+    assert result is not None
+    assert "saya telah membuat rencana" in result
+    assert "belajar Python" in result 
+
+def test_process_with_context_without_personalization():
+    engine = PlannerEngine()
+
+    context = {}
+
+    with patch(
+        "core.engines.planner_engine.save_plan"
+    ):
+        result = engine.process_with_context(
+            "buat rencana untuk belajar Python",
+            context,
+        )
+
+    assert result is not None
+    assert "aku telah membuat rencana" in result       

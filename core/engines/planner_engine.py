@@ -52,6 +52,26 @@ class PlannerEngine(BaseEngine):
             "Langkah ketiga",
         ]
 
+    def process_with_context(
+        self,
+        message: str,
+        context,
+    ) -> str | None:
+        result = self.process(message)
+
+        if result is None:
+            return None
+
+        response_style = self._get_response_style(context)
+
+        if response_style == "formal":
+            return result.replace(
+                "Baik, aku telah membuat rencana",
+                "Baik, saya telah membuat rencana",
+            )
+
+        return result
+
     def process(self, message: str) -> str | None:
         intent = self.analyze(message)
 
@@ -78,4 +98,25 @@ class PlannerEngine(BaseEngine):
         return (
             f'Baik, aku telah membuat rencana untuk tujuan "{goal}":\n\n'
             f"{steps}"
+        )
+
+    def _get_response_style(self, context) -> str:
+        if not context:
+            return "default"
+
+        if isinstance(context, dict):
+            personalization = context.get("personalization", context)
+        else:
+            personalization = getattr(
+                context,
+                "personalization",
+                None,
+            )
+
+        if not personalization:
+            return "default"
+
+        return personalization.get(
+            "response_style",
+            "default",
         )

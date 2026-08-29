@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import ANY, patch
 
 from core.router import process_user_input
 
@@ -24,7 +24,8 @@ def test_engine_response_has_priority(
     assert result == "Jawaban dari engine"
 
     mock_engine_manager.process.assert_called_once_with(
-        "buat rencana untuk belajar Python"
+        "buat rencana untuk belajar Python",
+        ANY,
     )
 
     mock_detect_command.assert_not_called()
