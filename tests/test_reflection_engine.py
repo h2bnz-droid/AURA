@@ -30,3 +30,11 @@ def test_reflection_engine_returns_unknown():
     )
 
     assert result == ReflectionIntent.UNKNOWN_INTENT
+
+def test_reflection_engine_process_reflect():
+    engine = ReflectionEngine()
+
+    result = engine.process("aku ingin refleksi")
+
+    assert result is not None
+    assert "Refleksi berdasarkan" in result

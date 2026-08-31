@@ -19,7 +19,10 @@ def process_user_input(user_input: str) -> str:
 
     # Semua engine tetap menggunakan user_input
     # agar kontrak engine existing tidak berubah.
-    response = engine_manager.process(user_input)
+    response = engine_manager.process(
+        user_input,
+        context,
+    )
 
     if response:
         return response

@@ -40,12 +40,28 @@ class GoalEngine(BaseEngine):
 
     @staticmethod
     def _parse_progress(message: str):
-        match = re.match(r"(?:update|progres|kemajuan)\\s+(?:goal\\s+)?(.+?)\\s+(?:menjadi\\s+)?(\\d{1,3})%?$", message.strip(), re.IGNORECASE)
+        text = message.strip()
+
+        match = re.match(
+            r"^(?:update|progres|kemajuan|progress)\s+"
+            r"(?:goal\s+)?"
+            r"(.+?)\s+"
+            r"(?:menjadi\s+)?"
+            r"(\d{1,3})%?$",
+            text,
+            re.IGNORECASE,
+        )
+
         if not match:
             return None
+
         title, progress = match.groups()
         value = int(progress)
-        return (title.strip(" ."), value) if 0 <= value <= 100 else None
+
+        if not 0 <= value <= 100:
+            return None
+
+        return title.strip(" ."), value
 
     def validate_goal(self, title: str) -> bool:
         if not title or len(title.strip()) < 3:

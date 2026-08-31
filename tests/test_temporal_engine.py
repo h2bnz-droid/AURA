@@ -120,3 +120,60 @@ def test_temporal_engine_process_unknown():
     )
 
     assert result is None
+
+def test_process_with_context_keeps_existing_behavior():
+    engine = TemporalEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "casual",
+        },
+    }
+
+    result = engine.process_with_context(
+        "Bagaimana kondisi saya?",
+        context,
+    )
+
+    assert result is not None
+    assert "Kondisi terakhir yang tercatat" in result
+
+
+def test_process_with_context_uses_personalization():
+    engine = TemporalEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "formal",
+        },
+    }
+
+    with patch(
+        "core.engines.temporal_engine.event_history"
+    ) as mock_history:
+        mock_history.return_value = []
+
+        result = engine.process_with_context(
+            "trend Python",
+            context,
+        )
+
+    assert result == "Data yang tersedia belum cukup untuk melihat trend Python."
+
+
+def test_process_with_context_without_personalization():
+    engine = TemporalEngine()
+
+    context = {}
+
+    with patch(
+        "core.engines.temporal_engine.latest_event"
+    ) as mock_latest:
+        mock_latest.return_value = None
+
+        result = engine.process_with_context(
+            "Bagaimana kondisi saya?",
+            context,
+        )
+
+    assert result == "Belum ada data kondisi terkini."

@@ -62,6 +62,53 @@ class KnowledgeEngine(BaseEngine):
 
         return True
 
+    def process_with_context(
+        self,
+        message: str,
+        context,
+    ) -> str | None:
+        result = self.process(message)
+
+        if result is None:
+            return None
+
+        response_style = self._get_response_style(context)
+
+        if response_style == "formal":
+            return result.replace(
+                "Aku membutuhkan",
+                "Saya membutuhkan",
+            ).replace(
+                "Aku akan membantu",
+                "Saya akan membantu",
+            )
+
+        return result
+
+    def _get_response_style(self, context) -> str:
+        if not context:
+            return "default"
+
+        if isinstance(context, dict):
+            personalization = context.get(
+                "personalization",
+                context,
+            )
+        else:
+            personalization = getattr(
+                context,
+                "personalization",
+                None,
+            )
+
+        if not personalization:
+            return "default"
+
+        return personalization.get(
+            "response_style",
+            "default",
+        )
+
     def process(self, message: str) -> str | None:
         intent = self.analyze(message)
 

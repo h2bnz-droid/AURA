@@ -103,3 +103,91 @@ def test_build_context_includes_personalization():
 
     assert hasattr(context, "personalization")
     assert isinstance(context.personalization, dict)
+
+def test_context_has_active_mindset():
+    context = build_context("halo")
+
+    assert hasattr(context, "active_mindset")
+    assert context.active_mindset is None
+
+def test_build_context_includes_mindsets(monkeypatch):
+    monkeypatch.setattr(
+        "core.context_builder.owner_name",
+        lambda: None,
+    )
+
+    monkeypatch.setattr(
+        "core.context_builder.history",
+        lambda limit: [],
+    )
+
+    monkeypatch.setattr(
+        "core.context_builder.memory_retrieval.retrieve",
+        lambda user_input: [],
+    )
+
+    context = build_context("halo")
+
+    assert context.mindsets
+    assert any(
+        mindset.name == "growth"
+        for mindset in context.mindsets
+    )
+
+def test_build_context_detects_active_mindset(monkeypatch):
+    monkeypatch.setattr(
+        "core.context_builder.owner_name",
+        lambda: None,
+    )
+    monkeypatch.setattr(
+        "core.context_builder.history",
+        lambda limit: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.memory_retrieval.retrieve",
+        lambda user_input: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.event_history",
+        lambda: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.latest_emotion",
+        lambda: None,
+    )
+    monkeypatch.setattr(
+        "core.context_builder.latest",
+        lambda: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.get_all_relationships",
+        lambda: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.get_all",
+        lambda: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.collect_long_term_context",
+        lambda: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.get_mindsets",
+        lambda: [],
+    )
+    monkeypatch.setattr(
+        "core.context_builder.detect_mindset",
+        lambda user_input: type(
+            "Mindset",
+            (),
+            {
+                "name": "growth",
+                "description": "Kemampuan dapat berkembang.",
+            },
+        )(),
+    )
+
+    context = build_context("Aku ingin belajar lebih baik.")
+
+    assert context.active_mindset is not None
+    assert context.active_mindset.name == "growth"

@@ -131,3 +131,53 @@ def test_process_unknown():
     )
 
     assert result is None
+
+def test_process_with_context_keeps_existing_behavior():
+    engine = DecisionEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "casual",
+        },
+    }
+
+    result = engine.process_with_context(
+        "bantu aku memilih kuliah atau kerja",
+        context,
+    )
+
+    assert result is not None
+    assert "aku menyarankan" in result
+
+
+def test_process_with_context_uses_personalization():
+    engine = DecisionEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "formal",
+        },
+    }
+
+    result = engine.process_with_context(
+        "bantu aku memilih kuliah atau kerja",
+        context,
+    )
+
+    assert result is not None
+    assert "saya menyarankan" in result
+    assert "aku menyarankan" not in result
+
+
+def test_process_with_context_without_personalization():
+    engine = DecisionEngine()
+
+    context = {}
+
+    result = engine.process_with_context(
+        "bantu aku memilih kuliah atau kerja",
+        context,
+    )
+
+    assert result is not None
+    assert "aku menyarankan" in result    

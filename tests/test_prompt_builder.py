@@ -81,3 +81,39 @@ def test_prompt_builder_preserves_section_order():
     assert profile_index < memory_index
     assert memory_index < history_index
     assert history_index < current_index
+
+def test_prompt_builder_includes_mindsets():
+    context = AuraContext("Bagaimana cara belajar?")
+
+    context.mindsets = [
+        type(
+            "Mindset",
+            (),
+            {
+                "name": "growth",
+                "description": "Kemampuan dapat berkembang.",
+            },
+        )(),
+    ]
+
+    prompt = PromptBuilder().build(context)
+
+    assert "[MINDSET]" in prompt
+    assert "- growth: Kemampuan dapat berkembang." in prompt
+
+def test_prompt_builder_includes_active_mindset():
+    context = AuraContext("Aku ingin menyerah.")
+
+    context.active_mindset = type(
+        "Mindset",
+        (),
+        {
+            "name": "resilient",
+            "description": "Kesulitan dapat dihadapi.",
+        },
+    )()
+
+    prompt = PromptBuilder().build(context)
+
+    assert "[ACTIVE MINDSET]" in prompt
+    assert "- resilient: Kesulitan dapat dihadapi." in prompt

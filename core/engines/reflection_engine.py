@@ -121,14 +121,3 @@ class ReflectionEngine(BaseEngine):
             )
 
         return None
-
-    def latest_reflections(self):
-        return latest()
-
-    def test_reflection_engine_process_reflect():
-        engine = ReflectionEngine()
-
-        result = engine.process("aku ingin refleksi")
-
-        assert result is not None
-        assert "Refleksi berdasarkan" in result

@@ -91,3 +91,53 @@ def test_emotion_engine_process_unknown():
     )
 
     assert result is None
+
+def test_process_with_context_keeps_existing_behavior():
+    engine = EmotionEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "casual",
+        },
+    }
+
+    result = engine.process_with_context(
+        "Aku sangat senang hari ini",
+        context,
+    )
+
+    assert result is not None
+    assert "Aku menangkap" in result
+
+
+def test_process_with_context_uses_personalization():
+    engine = EmotionEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "formal",
+        },
+    }
+
+    result = engine.process_with_context(
+        "Aku sangat senang hari ini",
+        context,
+    )
+
+    assert result is not None
+    assert "Saya menangkap" in result
+    assert "Aku menangkap" not in result
+
+
+def test_process_with_context_without_personalization():
+    engine = EmotionEngine()
+
+    context = {}
+
+    result = engine.process_with_context(
+        "Aku sangat senang hari ini",
+        context,
+    )
+
+    assert result is not None
+    assert "Aku menangkap" in result    

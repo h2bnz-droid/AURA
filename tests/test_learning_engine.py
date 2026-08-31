@@ -135,3 +135,53 @@ def test_learning_engine_process_start(mock_start):
 
     mock_start.assert_called_once_with("Python")
     assert result == "Aku akan mencatat proses belajarmu."    
+
+def test_process_with_context_keeps_existing_behavior():
+    engine = LearningEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "casual",
+        },
+    }
+
+    result = engine.process_with_context(
+        "Aku sedang belajar Python",
+        context,
+    )
+
+    assert result is not None
+    assert "Aku akan mencatat" in result
+
+
+def test_process_with_context_uses_personalization():
+    engine = LearningEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "formal",
+        },
+    }
+
+    result = engine.process_with_context(
+        "Aku sedang belajar Python",
+        context,
+    )
+
+    assert result is not None
+    assert "Saya akan mencatat" in result
+    assert "Aku akan mencatat" not in result
+
+
+def test_process_with_context_without_personalization():
+    engine = LearningEngine()
+
+    context = {}
+
+    result = engine.process_with_context(
+        "Aku sedang belajar Python",
+        context,
+    )
+
+    assert result is not None
+    assert "Aku akan mencatat" in result    

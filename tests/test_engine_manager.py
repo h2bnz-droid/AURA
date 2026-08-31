@@ -75,4 +75,24 @@ def test_process_keeps_existing_engine_contract():
         {"response_style": "casual"},
     )
 
-    assert result == "legacy:halo"       
+    assert result == "legacy:halo" 
+
+def test_engine_manager_keeps_conversation_as_fallback():
+    manager = EngineManager()
+
+    result = manager.process(
+        "hari ini aku sedang merasa cukup produktif"
+    )
+
+    assert result is not None
+    assert "mendengarkan" in result 
+
+def test_engine_manager_handles_knowledge_input():
+    manager = EngineManager()
+
+    result = manager.process(
+        "jelaskan Python"
+    )
+
+    assert result is not None
+    assert "Python" in result             

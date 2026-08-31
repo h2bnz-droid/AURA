@@ -1,48 +1,104 @@
+from core.domain.relationship_intent import RelationshipIntent
 from core.engines.relationship_engine import RelationshipEngine
 
 
-def test_relationship_engine_create():
+def test_relationship_engine_analyze_create():
     engine = RelationshipEngine()
 
-    response = engine.process(
+    result = engine.analyze(
         "Aku punya teman bernama Budi"
     )
 
-    assert response is not None
-    assert "Budi" in response
+    assert result == RelationshipIntent.CREATE
 
 
-def test_relationship_engine_show():
+def test_relationship_engine_analyze_show():
     engine = RelationshipEngine()
 
-    engine.process(
-        "Aku punya teman bernama Budi"
+    result = engine.analyze(
+        "lihat relasi"
     )
 
-    response = engine.process("lihat relasi")
-
-    assert response is not None
-    assert "Budi" in response
+    assert result == RelationshipIntent.SHOW
 
 
-def test_relationship_engine_update():
+def test_relationship_engine_analyze_update():
     engine = RelationshipEngine()
 
-    engine.process(
-        "Aku punya teman bernama Budi"
-    )
-
-    response = engine.process(
+    result = engine.analyze(
         "ubah relasi Budi menjadi colleague"
     )
 
-    assert response is not None
-    assert "colleague" in response
+    assert result == RelationshipIntent.UPDATE
 
 
-def test_relationship_engine_unknown():
+def test_relationship_engine_analyze_unknown():
     engine = RelationshipEngine()
 
-    assert engine.process(
-        "hari ini cuacanya bagus"
-    ) is None
+    result = engine.analyze(
+        "Halo AURA"
+    )
+
+    assert result == RelationshipIntent.UNKNOWN_INTENT
+
+
+def test_relationship_engine_parse_create():
+    engine = RelationshipEngine()
+
+    result = engine._parse_create(
+        "Aku punya teman bernama Budi"
+    )
+
+    assert result == ("Budi", "teman")
+
+
+def test_relationship_engine_parse_create_invalid():
+    engine = RelationshipEngine()
+
+    result = engine._parse_create(
+        "Aku punya teman"
+    )
+
+    assert result is None
+
+
+def test_relationship_engine_parse_update():
+    engine = RelationshipEngine()
+
+    result = engine._parse_update(
+        "ubah relasi Budi menjadi colleague"
+    )
+
+    assert result == ("Budi", "colleague")
+
+
+def test_relationship_engine_parse_update_invalid():
+    engine = RelationshipEngine()
+
+    result = engine._parse_update(
+        "ubah relasi Budi"
+    )
+
+    assert result is None
+
+
+def test_relationship_engine_create_invalid_format():
+    engine = RelationshipEngine()
+
+    result = engine.process(
+        "Aku punya teman"
+    )
+
+    assert result is not None
+    assert "Format relationship belum dikenali" in result
+
+
+def test_relationship_engine_update_missing_relationship():
+    engine = RelationshipEngine()
+
+    result = engine.process(
+        "ubah relasi TidakAda menjadi colleague"
+    )
+
+    assert result is not None
+    assert "belum ditemukan" in result

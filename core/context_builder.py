@@ -15,6 +15,10 @@ from services.integrated_cognitive_context_service import (
 from services.adaptive_personalization_service import (
     AdaptivePersonalizationService,
 )
+from services.mindset_service import (
+    get_mindsets,
+    detect_mindset,
+)
 
 memory_retrieval = MemoryRetrieval()
 integrated_cognitive_context_service = (
@@ -66,6 +70,10 @@ def build_context(user_input: str) -> AuraContext:
         adaptive_personalization_service.build_context()
     )
 
+    # Mindsets
+    context.mindsets = get_mindsets()
+    context.active_mindset = detect_mindset(user_input)
+
     return context
 
 def _normalize_long_term_context_item(item):
@@ -83,4 +91,19 @@ def _normalize_long_term_context_item(item):
     }
 
 def build_integrated_cognitive_context(user_input: str):
-    return integrated_cognitive_context_service.build()
+    mindsets = get_mindsets()
+
+    mindset_items = [
+        {
+            "category": "mindset",
+            "value": mindset.name,
+            "source": "mindset_service",
+            "confidence": 1.0,
+            "relevance": 0.0,
+        }
+        for mindset in mindsets
+    ]
+
+    return integrated_cognitive_context_service.build(
+        relevant=mindset_items,
+    )

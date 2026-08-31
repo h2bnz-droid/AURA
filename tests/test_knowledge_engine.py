@@ -117,3 +117,53 @@ def test_process_unknown():
     )
 
     assert result is None
+
+def test_process_with_context_keeps_existing_behavior():
+    engine = KnowledgeEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "casual",
+        },
+    }
+
+    result = engine.process_with_context(
+        "jelaskan Python",
+        context,
+    )
+
+    assert result is not None
+    assert "Aku akan membantu" in result
+
+
+def test_process_with_context_uses_personalization():
+    engine = KnowledgeEngine()
+
+    context = {
+        "personalization": {
+            "response_style": "formal",
+        },
+    }
+
+    result = engine.process_with_context(
+        "jelaskan Python",
+        context,
+    )
+
+    assert result is not None
+    assert "Saya akan membantu" in result
+    assert "Aku akan membantu" not in result
+
+
+def test_process_with_context_without_personalization():
+    engine = KnowledgeEngine()
+
+    context = {}
+
+    result = engine.process_with_context(
+        "jelaskan Python",
+        context,
+    )
+
+    assert result is not None
+    assert "Aku akan membantu" in result    

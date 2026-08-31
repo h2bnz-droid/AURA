@@ -23,3 +23,11 @@ class IntegratedCognitiveContext:
             + self.relevant
             + self.recent
         )
+
+@dataclass
+class CognitiveContextItem:
+    category: str
+    value: Any
+    source: str
+    confidence: float
+    relevance: float = 0.0

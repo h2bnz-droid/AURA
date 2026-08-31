@@ -72,6 +72,23 @@ class PromptBuilder:
                     f"{attribute['attribute_value']}"
                 )
 
+        if context.mindsets:
+            prompt.append("")
+            prompt.append("[MINDSET]")
+
+            for mindset in context.mindsets:
+                prompt.append(
+                    f"- {mindset.name}: {mindset.description}"
+                )
+
+        if context.active_mindset:
+            prompt.append("")
+            prompt.append("[ACTIVE MINDSET]")
+            prompt.append(
+                f"- {context.active_mindset.name}: "
+                f"{context.active_mindset.description}"
+            )
+
         if context.personalization:
             prompt.append("")
             prompt.append("[PERSONALIZATION]")
