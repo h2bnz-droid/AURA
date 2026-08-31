@@ -2,17 +2,19 @@
 
 ## Vision
 
-AURA dikembangkan sebagai AI Companion dengan arsitektur modular yang dapat berkembang dari sistem assistant dasar menuju sistem cognitive assistant yang lebih mampu memahami konteks, tujuan, keputusan, pengetahuan, dan perkembangan pengguna.
+AURA dikembangkan sebagai **AI Companion** dengan arsitektur modular yang berkembang dari assistant dasar menuju **Personal Cognitive Assistant** yang mampu memahami konteks, tujuan, keputusan, pengetahuan, pola interaksi, dan perkembangan pengguna.
+
+Roadmap AURA dibangun secara bertahap melalui sprint yang dapat diverifikasi dengan test dan dokumentasi.
 
 ---
 
 ## Milestone 1 — Foundation
 
-**Status:** Completed
+*Status: Completed**
 
-Milestone pertama berfokus pada pembangunan fondasi arsitektur AURA.
+Milestone pertama membangun fondasi arsitektur dan sistem dasar AURA.
 
-### Architecture
+## Architecture
 
 * [x] Modular project structure
 * [x] BaseEngine
@@ -23,7 +25,7 @@ Milestone pertama berfokus pada pembangunan fondasi arsitektur AURA.
 * [x] Service layer
 * [x] Database layer
 
-### Core Systems
+## Core Systems
 
 * [x] AuraKernel
 * [x] AI Provider
@@ -31,21 +33,21 @@ Milestone pertama berfokus pada pembangunan fondasi arsitektur AURA.
 * [x] Context Builder
 * [x] Conversation History
 
-### Foundation Engines
+## Foundation Engines
 
 * [x] ProfileEngine
 * [x] MemoryEngine
 * [x] GoalEngine
 * [x] ReflectionEngine
 
-### Persistence
+## Persistence
 
 * [x] Profile database
 * [x] Memory database
 * [x] Goal database
 * [x] Reflection database
 
-### Quality
+## Quality
 
 * [x] Type hints
 * [x] Unit tests
@@ -56,11 +58,11 @@ Milestone pertama berfokus pada pembangunan fondasi arsitektur AURA.
 
 ## Milestone 2 — Intelligence Expansion
 
-**Status:** Completed
+*Status: Completed**
 
-Milestone kedua memperluas kemampuan AURA dengan sistem perencanaan, pengambilan keputusan, pengetahuan, dan percakapan.
+Milestone kedua memperluas kemampuan AURA dengan planning, decision support, knowledge retrieval, dan conversation handling.
 
-### Planner
+## Planner
 
 * [x] PlannerIntent
 * [x] PlannerEngine
@@ -68,15 +70,15 @@ Milestone kedua memperluas kemampuan AURA dengan sistem perencanaan, pengambilan
 * [x] Planner database
 * [x] Plan persistence
 * [x] Planner unit tests
-* [x] Planner integration test
+* [x] Planner integration tests
 
-### Decision
+## Decision
 
 * [x] DecisionIntent
 * [x] DecisionEngine
 * [x] Decision unit tests
 
-### Knowledge
+## Knowledge
 
 * [x] KnowledgeIntent
 * [x] KnowledgeEngine
@@ -84,7 +86,7 @@ Milestone kedua memperluas kemampuan AURA dengan sistem perencanaan, pengambilan
 * [x] Search query extraction
 * [x] Explanation query extraction
 
-### Conversation
+## Conversation
 
 * [x] ConversationIntent
 * [x] ConversationEngine
@@ -92,15 +94,15 @@ Milestone kedua memperluas kemampuan AURA dengan sistem perencanaan, pengambilan
 * [x] General conversation fallback
 * [x] Conversation unit tests
 
-### Integration
+## Integration
 
 * [x] Sprint 2 engines integrated into EngineManager
 * [x] Engine Manager integration tests
 * [x] Full regression testing
 
-### Result
+## Result
 
-Sprint 2 selesai dengan:
+Sprint 2 completed with:
 
 ```text
 50 passed
@@ -108,19 +110,19 @@ Sprint 2 selesai dengan:
 
 ---
 
----
-
 ## Milestone 3 — Cognitive Systems
 
-**Status:** Planned
+*Status: Completed**
 
-Milestone ketiga berfokus pada pengembangan kemampuan kognitif AURA yang lebih dalam.
+Milestone ketiga membangun fondasi cognitive systems AURA, terutama contextual intelligence dan learning capability.
 
-### Sprint 3 — Context Intelligence
+---
 
-**Status:** Completed
+## Sprint 003 — Context Intelligence
 
-Sprint ketiga berfokus pada pembangunan contextual intelligence layer yang menghubungkan input pengguna, memory retrieval, context construction, prompt generation, dan AI pipeline.
+*Status: Completed**
+
+Sprint ini membangun contextual intelligence layer yang menghubungkan user input, memory retrieval, context construction, prompt generation, dan AI pipeline.
 
 ### Context
 
@@ -149,14 +151,14 @@ Sprint ketiga berfokus pada pembangunan contextual intelligence layer yang mengh
 * [x] Current user message section
 * [x] Empty context handling
 
-## Integration*
+### Integrations
 
 * [x] Chat pipeline integration
 * [x] Router integration
 * [x] Context/prompt integration
 * [x] Full pipeline integration
 
-## Quality*
+### Quality**
 
 * [x] Context Builder tests
 * [x] Memory Retrieval tests
@@ -166,101 +168,290 @@ Sprint ketiga berfokus pada pembangunan contextual intelligence layer yang mengh
 * [x] Integration tests
 * [x] Full regression testing
 
-````markdown
-### Result
-
-Sprint 3 selesai dengan:
+### Result**
 
 ```text
 82 passed
 ```
 
-# Sprint 004 — Learning System
-
-## Status: Completed
-
-Sprint keempat berfokus pada pembangunan Learning System AURA untuk mencatat, memantau, dan menampilkan proses belajar pengguna.
-
 ---
 
-## Learning Domain
+## Sprint 004 — Learning System
 
-- [x] LearningIntent
-- [x] LearningEngine
-- [x] Start learning intent
-- [x] Learning progress intent
-- [x] Show learning intent
-- [x] Unknown intent handling
+*Status: Completed**
 
-## Learning Service
+Sprint ini membangun Learning System untuk mencatat, memantau, dan menampilkan proses belajar pengguna.
 
-- [x] LearningService
-- [x] Start learning
-- [x] Active learning retrieval
-- [x] Learning progress update
-- [x] Learning lookup
+### Learning Domain
 
-## Learning Database
+* [x] LearningIntent
+* [x] LearningEngine
+* [x] Start learning intent
+* [x] Learning progress intent
+* [x] Show learning intent
+* [x] Unknown intent handling
 
-- [x] Learning table
-- [x] Create learning record
-- [x] Retrieve active learning
-- [x] Update learning progress
-- [x] Learning persistence
+### Learning Service
 
-## Engine Integration
+* [x] LearningService
+* [x] Start learning
+* [x] Active learning retrieval
+* [x] Learning progress update
+* [x] Learning lookup
 
-- [x] LearningEngine integrated into EngineManager
-- [x] Learning engine priority handling
-- [x] Learning integration tests
+### Learning Database
 
-## Quality
+* [x] Learning table
+* [x] Create learning record
+* [x] Retrieve active learning
+* [x] Update learning progress
+* [x] Learning persistence
 
-- [x] LearningEngine unit tests
-- [x] LearningService tests
-- [x] Learning integration tests
-- [x] Full regression testing
+### Engine Integration
 
-## Result
+* [x] LearningEngine integrated into EngineManager
+* [x] Learning engine priority handling
+* [x] Learning integration tests
 
-Sprint 4 selesai dengan:
+### Quality*
+
+* [x] LearningEngine unit tests
+* [x] LearningService tests
+* [x] Learning integration tests
+* [x] Full regression testing
+
+### Result*
 
 ```text
 99 passed
+```
+
+---
 
 ## Milestone 4 — Personal Cognitive Assistant
 
-## Status: planned
+*Status: In Progress**
 
-Milestone keempat berfokus pada integrasi kemampuan AURA menjadi sistem personal cognitive assistant yang lebih utuh.
+Milestone keempat mengintegrasikan berbagai cognitive capability menjadi sistem personal cognitive assistant yang lebih utuh.
 
-### Planned Capabilities
+Fokus milestone ini adalah kemampuan AURA untuk membangun representasi pengguna yang semakin kaya dan menggunakan representasi tersebut dalam context dan interaction pipeline.
 
-* [ ] Long-term context management
-* [ ] Cross-engine context sharing
+---
+
+## Sprint 009 — Personal Cognitive Model
+
+*Status: Completed**
+
+Membangun model kognitif personal yang merepresentasikan atribut dan karakteristik pengguna yang relevan untuk interaksi AURA.
+
+* [x] Personal cognitive model
+* [x] Cognitive attributes
+* [x] Cognitive model service
+* [x] Cognitive context integration
+* [x] Persistence
+* [x] Tests
+* [x] Regression verification
+
+---
+
+## Sprint 010 — Long-Term Context Management
+
+*Status: Completed**
+
+Membangun kemampuan AURA mengelola informasi pengguna dalam konteks jangka panjang.
+
+* [x] Long-term context domain
+* [x] Long-term context service
+* [x] Context collection
+* [x] Context normalization
+* [x] Relevance handling
+* [x] Long-term context integration
+* [x] Tests
+* [x] Regression verification
+
+---
+
+## Sprint 011 — Integrated Cognitive Context
+
+*Status: Completed**
+
+Membangun lapisan yang menggabungkan berbagai sumber cognitive context menjadi satu representasi yang dapat digunakan oleh pipeline AURA.
+
+* [x] Integrated cognitive context domain
+* [x] Cognitive context items
+* [x] Context aggregation
+* [x] Stable context
+* [x] Relevant context
+* [x] Context Builder integration
+* [x] Prompt integration
+* [x] Tests
+* [x] Regression verification
+
+---
+
+## Sprint 012 — Adaptive Personalization
+
+*Status: Completed**
+
+Membangun fondasi adaptive personalization menggunakan preference dan interaction signal untuk menyesuaikan cara AURA berinteraksi dengan pengguna.
+
+* [x] Personalization service
+* [x] Preference context
+* [x] Interaction signal
+* [x] Adaptive personalization context
+* [x] Context Builder integration
+* [x] Prompt Builder integration
+* [x] Tests
+* [x] Regression verification
+
+---
+
+## Sprint 013 — Mindset Cognitive State
+
+*Status: Completed**
+
+Membangun representasi **mindset** pengguna sebagai bagian dari cognitive state AURA.
+
+### Mindset Domain
+
+* [x] Mindset domain
+* [x] Mindset name
+* [x] Mindset description
+
+### Mindset Service
+
+* [x] Default mindsets
+* [x] Mindset lookup
+* [x] Mindset detection
+* [x] Growth mindset
+* [x] Resilient mindset
+* [x] Reflective mindset
+
+### Mindset Engine
+
+* [x] MindsetEngine
+* [x] Show mindset intent
+* [x] Find mindset intent
+* [x] Mindset engine integration
+* [x] Active mindset handling
+
+### Cognitive Context
+
+* [x] Mindset context
+* [x] Active mindset
+* [x] Mindset integration into context
+* [x] Integrated cognitive context support
+
+### Prompt Pipelines
+
+* [x] Mindset prompt section
+* [x] Active mindset prompt section
+* [x] Mindset context available to AI layer
+
+### Qualities
+
+* [x] Mindset service tests
+* [x] Mindset detection tests
+* [x] Mindset context tests
+* [x] Mindset engine tests
+* [x] Mindset integration tests
+* [x] AI context tests
+* [x] Full regression testing
+
+### Results
+
+```text
+312 passed
+```
+
+### Git Checkpoint
+
+```text
+Commit: aa8502b
+Message: feat: complete sprint 013 mindset cognitive state
+```
+
+---
+
+## Milestone 4 — Remaining Direction
+
+Setelah Sprint 013, pengembangan berikutnya diarahkan untuk memperkuat kemampuan AURA dalam memahami pengguna secara lebih dinamis.
+
+Potential areas:
+
+* [ ] Cognitive state evolution
+* [ ] Cross-engine cognitive interaction
 * [ ] Adaptive planning
-* [ ] Decision support
+* [ ] Decision support using cognitive context
 * [ ] Personal knowledge management
 * [ ] Learning from user interactions
-* [ ] Improved personalization
+* [ ] Deeper personalization
+* [ ] Context prioritization
+* [ ] Cognitive state history
+* [ ] Longitudinal user modeling
+
+Item di atas merupakan **arah pengembangan**, bukan klaim fitur yang sudah selesai.
 
 ---
 
 ## Milestone 5 — AURA Maturity
 
-## Status: release
+*Status: Planned**
 
-Milestone akhir berfokus pada stabilitas, keamanan, observability, dan kesiapan AURA sebagai platform cognitive assistant.
+Milestone akhir berfokus pada stabilitas, keamanan, observability, performance, dan kesiapan AURA sebagai platform cognitive assistant.
 
-### Planned Areas
+## Security
 
 * [ ] Security hardening
+* [ ] Data protection
+* [ ] Privacy safeguards
+* [ ] Input validation
+* [ ] Sensitive context handling
+
+## Reliability
+
 * [ ] Reliability improvements
-* [ ] Performance optimization
-* [ ] Observability
-* [ ] Advanced testing
-* [ ] Documentation completion
+* [ ] Error recovery
+* [ ] Failure isolation
+* [ ] Graceful degradation
+
+## Performance
+
+* [ ] Context performance optimization
+* [ ] Memory retrieval optimization
+* [ ] AI pipeline optimization
+* [ ] Database optimization
+
+## Observability
+
+* [ ] Structured logging
+* [ ] Metrics
+* [ ] Diagnostics
+* [ ] Engine tracing
+* [ ] Context inspection
+
+## Testing
+
+* [ ] Advanced integration testing
+* [ ] End-to-end testing
+* [ ] Performance testing
+* [ ] Reliability testing
+* [ ] Regression automation
+
+## Documentation
+
+* [ ] Architecture documentation completion
+* [ ] Engine documentation
+* [ ] Service documentation
+* [ ] Cognitive system documentation
+* [ ] Developer documentation
+
+## Release
+
 * [ ] Stable release process
+* [ ] Versioning strategy
+* [ ] Release checklist
+* [ ] Production readiness
 
 ---
 
@@ -274,26 +465,35 @@ Milestone 2 — Intelligence Expansion
 ████████████████████ 100%
 
 Milestone 3 — Cognitive Systems
-░░░░░░░░░░░░░░░░░░░░   0%
+████████████████████ 100%
 
 Milestone 4 — Personal Cognitive Assistant
-░░░░░░░░░░░░░░░░░░░░   0%
+████████████████░░░░ 80%
 
 Milestone 5 — AURA Maturity
 ░░░░░░░░░░░░░░░░░░░░   0%
 ```
 
+> Milestone 4 progress is an architectural/project estimate based on completed cognitive-system sprints, not a mathematical completion percentage of every possible capability.
+
+---
+
 ## Release History
 
-| Release | Milestone              | Status    |
-| ------- | ---------------------- | --------- |
-| v0.1.0  | Foundation             | Completed |
-| v0.2.0  | Intelligence Expansion | Completed |
-| v0.3.0  | Context Intelligence   | Completed |
+| Release | Milestone                    | Status      |
+| ------- | ---------------------------- | ----------- |
+| v0.1.0  | Foundation                   | Completed   |
+| v0.2.0  | Intelligence Expansion       | Completed   |
+| v0.3.0  | Context Intelligence         | Completed   |
+| v0.4.0  | Personal Cognitive Assistant | In Progress |
+
+Sprint 013 is currently part of the ongoing v0.4.x development line.
+
+---
 
 ## Development Principle
 
-Setiap milestone harus mempertahankan prinsip arsitektur AURA:
+Setiap sprint dan milestone harus mempertahankan prinsip arsitektur AURA:
 
 * Modular architecture
 * Single Responsibility
@@ -302,5 +502,30 @@ Setiap milestone harus mempertahankan prinsip arsitektur AURA:
 * Service Layer separation
 * Database abstraction
 * Test-driven verification
+* Explicit cognitive context boundaries
+* Backward compatibility where practical
 
 Perubahan besar pada arsitektur harus didukung oleh test dan dokumentasi sebelum milestone dianggap selesai.
+
+---
+
+## Current Development State
+
+```text
+Latest completed sprint:
+Sprint 013 — Mindset Cognitive State
+
+Latest verified regression:
+312 passed
+
+Latest Git checkpoint:
+aa8502b
+
+Current milestone:
+Milestone 4 — Personal Cognitive Assistant
+
+Current development phase:
+Cognitive State Expansion
+```
+
+AURA saat ini telah melewati fase assistant foundation dan intelligence expansion, dan sedang berada pada fase pembangunan **Personal Cognitive Assistant**.
