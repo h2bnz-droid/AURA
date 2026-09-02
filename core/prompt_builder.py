@@ -1,7 +1,15 @@
 from core.context import AuraContext
+from services.context_prioritization_service import (
+    ContextPrioritizationService,
+)
 
 
 class PromptBuilder:
+
+    def __init__(self):
+        self.context_prioritization_service = (
+            ContextPrioritizationService()
+        )
 
     def build(self, context: AuraContext) -> str:
 
@@ -11,28 +19,38 @@ class PromptBuilder:
         prompt.append("AURA INTERNAL CONTEXT")
         prompt.append("==============================")
 
+        # Profile
         if context.profile:
             prompt.append("")
             prompt.append("[PROFILE]")
             prompt.append(f"Nama: {context.profile}")
 
+        # Memory
         if context.memories:
             prompt.append("")
             prompt.append("[MEMORY]")
 
             for memory in context.memories:
-                prompt.append(f"- {memory['memory_value']}")
+                prompt.append(
+                    f"- {memory['memory_value']}"
+                )
 
+        # Emotion
         if context.emotion:
             prompt.append("")
             prompt.append("[EMOTION]")
+
             prompt.append(
-                f"Emosi terakhir: {context.emotion['emotion']}"
-            )
-            prompt.append(
-                f"Intensitas: {context.emotion['intensity']}"
+                f"Emosi terakhir: "
+                f"{context.emotion['emotion']}"
             )
 
+            prompt.append(
+                f"Intensitas: "
+                f"{context.emotion['intensity']}"
+            )
+
+        # Temporal Context
         if context.temporal:
             prompt.append("")
             prompt.append("[TEMPORAL CONTEXT]")
@@ -40,9 +58,11 @@ class PromptBuilder:
             for event in context.temporal:
                 prompt.append(
                     f"- {event['event_type']}: "
-                    f"{event['subject']} = {event['value']}"
+                    f"{event['subject']} = "
+                    f"{event['value']}"
                 )
 
+        # Reflections
         if context.reflections:
             prompt.append("")
             prompt.append("[REFLECTION]")
@@ -52,6 +72,7 @@ class PromptBuilder:
                     f"- {reflection['summary']}"
                 )
 
+        # Relationships
         if context.relationships:
             prompt.append("")
             prompt.append("[RELATIONSHIP]")
@@ -62,9 +83,12 @@ class PromptBuilder:
                     f"{relationship['relationship_type']}"
                 )
 
+        # Personal Cognitive Model
         if context.cognitive_model:
             prompt.append("")
-            prompt.append("[PERSONAL COGNITIVE MODEL]")
+            prompt.append(
+                "[PERSONAL COGNITIVE MODEL]"
+            )
 
             for attribute in context.cognitive_model:
                 prompt.append(
@@ -72,32 +96,40 @@ class PromptBuilder:
                     f"{attribute['attribute_value']}"
                 )
 
+        # Mindsets
         if context.mindsets:
             prompt.append("")
             prompt.append("[MINDSET]")
 
             for mindset in context.mindsets:
                 prompt.append(
-                    f"- {mindset.name}: {mindset.description}"
+                    f"- {mindset.name}: "
+                    f"{mindset.description}"
                 )
 
+        # Active Mindset
         if context.active_mindset:
             prompt.append("")
             prompt.append("[ACTIVE MINDSET]")
+
             prompt.append(
                 f"- {context.active_mindset.name}: "
                 f"{context.active_mindset.description}"
             )
 
+        # Personalization
         if context.personalization:
             prompt.append("")
             prompt.append("[PERSONALIZATION]")
 
-            for name, value in context.personalization.items():
+            for name, value in (
+                context.personalization.items()
+            ):
                 prompt.append(
                     f"- {name}: {value}"
                 )
 
+        # Long-Term Context
         if context.long_term_context:
             prompt.append("")
             prompt.append("[LONG-TERM CONTEXT]")
@@ -107,7 +139,12 @@ class PromptBuilder:
                     f"- {item['content']}"
                 )
 
-        cognitive_state = getattr(context, "cognitive_state", None)
+        # Cognitive State
+        cognitive_state = getattr(
+            context,
+            "cognitive_state",
+            None,
+        )
 
         if cognitive_state:
             prompt.append("")
@@ -115,18 +152,22 @@ class PromptBuilder:
 
             if cognitive_state.mindset:
                 prompt.append(
-                    f"- Mindset: {cognitive_state.mindset}"
+                    f"- Mindset: "
+                    f"{cognitive_state.mindset}"
                 )
 
             if cognitive_state.emotion:
                 prompt.append(
-                    f"- Emotion: {cognitive_state.emotion}"
+                    f"- Emotion: "
+                    f"{cognitive_state.emotion}"
                 )
 
             prompt.append(
-                f"- Source: {cognitive_state.source}"
+                f"- Source: "
+                f"{cognitive_state.source}"
             )
 
+        # Cognitive Behavior
         cognitive_behavior = getattr(
             context,
             "cognitive_behavior",
@@ -136,29 +177,53 @@ class PromptBuilder:
         if cognitive_behavior:
             prompt.append("")
             prompt.append("[COGNITIVE BEHAVIOR]")
-            prompt.append(cognitive_behavior)    
+            prompt.append(cognitive_behavior)
 
+        # Integrated Cognitive Context
         if context.integrated_cognitive_context:
-            items = context.integrated_cognitive_context.all_items()
+            integrated_context = (
+                context.integrated_cognitive_context
+            )
 
-            if items:
+            # Collect all cognitive context layers.
+            #
+            # Priority must be calculated globally instead
+            # of independently for stable, relevant,
+            # and recent layers.
+            all_items = (
+                integrated_context.all_items()
+            )
+
+            prioritized_items = (
+                self.context_prioritization_service.prioritize(
+                    all_items
+                )
+            )
+
+            if prioritized_items:
                 prompt.append("")
-                prompt.append("[INTEGRATED COGNITIVE CONTEXT]")
+                prompt.append(
+                    "[INTEGRATED COGNITIVE CONTEXT]"
+                )
 
-                for item in items:
+                for item in prioritized_items:
                     prompt.append(
-                        f"- {item.category}: {item.value}"
-                    )        
+                        f"- {item.category}: "
+                        f"{item.value}"
+                    )
 
+        # Recent Conversation
         if context.history:
             prompt.append("")
             prompt.append("[RECENT CONVERSATION]")
 
             for chat in context.history:
                 prompt.append(
-                    f"{chat['role']}: {chat['message']}"
+                    f"{chat['role']}: "
+                    f"{chat['message']}"
                 )
 
+        # Current User Message
         prompt.append("")
         prompt.append("==============================")
         prompt.append("CURRENT USER MESSAGE")
