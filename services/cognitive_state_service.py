@@ -1,5 +1,8 @@
 from core.domain.cognitive_state import CognitiveState
-
+from core.domain.cognitive_state_history import (
+    CognitiveStateHistory,
+    CognitiveStateHistoryItem,
+)
 from database.cognitive_states import (
     create_table,
     get_latest_state,
@@ -87,6 +90,30 @@ class CognitiveStateService:
             state_type=state_type,
             limit=limit,
         )
+
+    def history_context(
+        self,
+        state_type: str | None = None,
+        limit: int = 10,
+    ) -> CognitiveStateHistory:
+
+        records = self.history(
+            state_type=state_type,
+            limit=limit,
+        )
+
+        items = [
+            CognitiveStateHistoryItem(
+                state_type=record["state_type"],
+                value=record["value"],
+                confidence=record["confidence"],
+                source=record["source"],
+                created_at=record.get("created_at"),
+            )
+            for record in records
+        ]
+
+        return CognitiveStateHistory(items=items)
 
     def _resolve_source(
         self,

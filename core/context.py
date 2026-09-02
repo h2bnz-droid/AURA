@@ -19,6 +19,9 @@ class AuraContext:
         # Cognitive State
         self.cognitive_state = None
 
+        # Cognitive State History
+        self.cognitive_state_history = None
+
         # Cognitive Behavior
         self.cognitive_behavior = None
 

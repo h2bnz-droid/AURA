@@ -80,6 +80,11 @@ def build_context(user_input: str) -> AuraContext:
     # Cognitive State
     context.cognitive_state = cognitive_state_service.latest()
 
+    # Cognitive State History
+    context.cognitive_state_history = (
+        cognitive_state_service.history_context()
+    )
+
     # Cognitive Behavior
     context.cognitive_behavior = cognitive_behavior.build(
         context.cognitive_state
@@ -93,6 +98,11 @@ def build_context(user_input: str) -> AuraContext:
     _add_cognitive_state_to_context(
         context.integrated_cognitive_context,
         context.cognitive_state,
+    )
+
+    _add_cognitive_state_history_to_context(
+        context.integrated_cognitive_context,
+        context.cognitive_state_history,
     )
     return context
 
@@ -184,5 +194,23 @@ def _add_cognitive_state_to_context(
                 source=cognitive_state.source,
                 confidence=1.0,
                 relevance=1.0,
+            )
+        )
+
+def _add_cognitive_state_history_to_context(
+    integrated_context,
+    cognitive_state_history,
+):
+    if cognitive_state_history is None:
+        return
+
+    for history_item in cognitive_state_history.items:
+        integrated_context.recent.append(
+            CognitiveContextItem(
+                category=f"{history_item.state_type}_history",
+                value=history_item.value,
+                source=history_item.source,
+                confidence=history_item.confidence,
+                relevance=0.5,
             )
         )

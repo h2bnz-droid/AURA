@@ -1,6 +1,9 @@
 from unittest.mock import patch
 
 from core.domain.cognitive_state import CognitiveState
+from core.domain.cognitive_state_history import (
+    CognitiveStateHistory,
+)
 from services.cognitive_state_service import CognitiveStateService
 
 
@@ -140,4 +143,38 @@ def test_history_returns_database_state_history(
     mock_get_state_history.assert_called_once_with(
         state_type="mindset",
         limit=5,
+    )
+
+@patch("services.cognitive_state_service.get_state_history")
+def test_history_context_returns_cognitive_state_history(
+    mock_get_state_history,
+):
+    mock_get_state_history.return_value = [
+        {
+            "state_type": "mindset",
+            "value": "growth",
+            "confidence": 0.9,
+            "source": "user_input",
+            "created_at": "2026-09-02",
+        }
+    ]
+
+    service = CognitiveStateService()
+
+    result = service.history_context()
+
+    assert isinstance(result, CognitiveStateHistory)
+    assert len(result.items) == 1
+
+    item = result.items[0]
+
+    assert item.state_type == "mindset"
+    assert item.value == "growth"
+    assert item.confidence == 0.9
+    assert item.source == "user_input"
+    assert item.created_at == "2026-09-02"
+
+    mock_get_state_history.assert_called_once_with(
+        state_type=None,
+        limit=10,
     )

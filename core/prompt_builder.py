@@ -167,6 +167,24 @@ class PromptBuilder:
                 f"{cognitive_state.source}"
             )
 
+        cognitive_state_history = getattr(
+            context,
+            "cognitive_state_history",
+            None,
+        )
+
+        if cognitive_state_history:
+            items = cognitive_state_history.items
+
+            if items:
+                prompt.append("")
+                prompt.append("[COGNITIVE STATE HISTORY]")
+
+                for item in items:
+                    prompt.append(
+                        f"- {item.state_type}: {item.value}"
+                    )    
+
         # Cognitive Behavior
         cognitive_behavior = getattr(
             context,
