@@ -13,9 +13,15 @@ class CognitiveContextItem:
 
 @dataclass
 class IntegratedCognitiveContext:
-    stable: list[CognitiveContextItem] = field(default_factory=list)
-    relevant: list[CognitiveContextItem] = field(default_factory=list)
-    recent: list[CognitiveContextItem] = field(default_factory=list)
+    stable: list[CognitiveContextItem] = field(
+        default_factory=list
+    )
+    relevant: list[CognitiveContextItem] = field(
+        default_factory=list
+    )
+    recent: list[CognitiveContextItem] = field(
+        default_factory=list
+    )
 
     def all_items(self) -> list[CognitiveContextItem]:
         return (
@@ -23,11 +29,3 @@ class IntegratedCognitiveContext:
             + self.relevant
             + self.recent
         )
-
-@dataclass
-class CognitiveContextItem:
-    category: str
-    value: Any
-    source: str
-    confidence: float
-    relevance: float = 0.0

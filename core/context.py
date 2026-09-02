@@ -16,4 +16,10 @@ class AuraContext:
         self.integrated_cognitive_context = None
         self.personalization = None
 
+        # Cognitive State
+        self.cognitive_state = None
+
+        # Cognitive Behavior
+        self.cognitive_behavior = None
+
         self.response = None

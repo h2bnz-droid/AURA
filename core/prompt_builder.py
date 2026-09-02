@@ -107,6 +107,37 @@ class PromptBuilder:
                     f"- {item['content']}"
                 )
 
+        cognitive_state = getattr(context, "cognitive_state", None)
+
+        if cognitive_state:
+            prompt.append("")
+            prompt.append("[COGNITIVE STATE]")
+
+            if cognitive_state.mindset:
+                prompt.append(
+                    f"- Mindset: {cognitive_state.mindset}"
+                )
+
+            if cognitive_state.emotion:
+                prompt.append(
+                    f"- Emotion: {cognitive_state.emotion}"
+                )
+
+            prompt.append(
+                f"- Source: {cognitive_state.source}"
+            )
+
+        cognitive_behavior = getattr(
+            context,
+            "cognitive_behavior",
+            None,
+        )
+
+        if cognitive_behavior:
+            prompt.append("")
+            prompt.append("[COGNITIVE BEHAVIOR]")
+            prompt.append(cognitive_behavior)    
+
         if context.integrated_cognitive_context:
             items = context.integrated_cognitive_context.all_items()
 
