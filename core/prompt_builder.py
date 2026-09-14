@@ -1,4 +1,5 @@
 from core.context import AuraContext
+from core.security import redact_sensitive_data
 from services.context_prioritization_service import (
     ContextPrioritizationService,
 )
@@ -10,6 +11,18 @@ class PromptBuilder:
         self.context_prioritization_service = (
             ContextPrioritizationService()
         )
+
+    @staticmethod
+    def _safe(value) -> str:
+        """
+        Convert context values to string and redact sensitive data
+        before entering the AI prompt.
+        """
+
+        if value is None:
+            return ""
+
+        return redact_sensitive_data(str(value))
 
     def build(self, context: AuraContext) -> str:
 
@@ -23,7 +36,9 @@ class PromptBuilder:
         if context.profile:
             prompt.append("")
             prompt.append("[PROFILE]")
-            prompt.append(f"Nama: {context.profile}")
+            prompt.append(
+                f"Nama: {self._safe(context.profile)}"
+            )
 
         # Memory
         if context.memories:
@@ -32,7 +47,7 @@ class PromptBuilder:
 
             for memory in context.memories:
                 prompt.append(
-                    f"- {memory['memory_value']}"
+                    f"- {self._safe(memory['memory_value'])}"
                 )
 
         # Emotion
@@ -42,12 +57,12 @@ class PromptBuilder:
 
             prompt.append(
                 f"Emosi terakhir: "
-                f"{context.emotion['emotion']}"
+                f"{self._safe(context.emotion['emotion'])}"
             )
 
             prompt.append(
                 f"Intensitas: "
-                f"{context.emotion['intensity']}"
+                f"{self._safe(context.emotion['intensity'])}"
             )
 
         # Temporal Context
@@ -57,9 +72,9 @@ class PromptBuilder:
 
             for event in context.temporal:
                 prompt.append(
-                    f"- {event['event_type']}: "
-                    f"{event['subject']} = "
-                    f"{event['value']}"
+                    f"- {self._safe(event['event_type'])}: "
+                    f"{self._safe(event['subject'])} = "
+                    f"{self._safe(event['value'])}"
                 )
 
         # Reflections
@@ -69,7 +84,7 @@ class PromptBuilder:
 
             for reflection in context.reflections:
                 prompt.append(
-                    f"- {reflection['summary']}"
+                    f"- {self._safe(reflection['summary'])}"
                 )
 
         # Relationships
@@ -79,8 +94,8 @@ class PromptBuilder:
 
             for relationship in context.relationships:
                 prompt.append(
-                    f"- {relationship['person_name']}: "
-                    f"{relationship['relationship_type']}"
+                    f"- {self._safe(relationship['person_name'])}: "
+                    f"{self._safe(relationship['relationship_type'])}"
                 )
 
         # Personal Cognitive Model
@@ -92,8 +107,8 @@ class PromptBuilder:
 
             for attribute in context.cognitive_model:
                 prompt.append(
-                    f"- {attribute['attribute_name']}: "
-                    f"{attribute['attribute_value']}"
+                    f"- {self._safe(attribute['attribute_name'])}: "
+                    f"{self._safe(attribute['attribute_value'])}"
                 )
 
         # Mindsets
@@ -103,8 +118,8 @@ class PromptBuilder:
 
             for mindset in context.mindsets:
                 prompt.append(
-                    f"- {mindset.name}: "
-                    f"{mindset.description}"
+                    f"- {self._safe(mindset.name)}: "
+                    f"{self._safe(mindset.description)}"
                 )
 
         # Active Mindset
@@ -113,8 +128,8 @@ class PromptBuilder:
             prompt.append("[ACTIVE MINDSET]")
 
             prompt.append(
-                f"- {context.active_mindset.name}: "
-                f"{context.active_mindset.description}"
+                f"- {self._safe(context.active_mindset.name)}: "
+                f"{self._safe(context.active_mindset.description)}"
             )
 
         # Personalization
@@ -126,7 +141,8 @@ class PromptBuilder:
                 context.personalization.items()
             ):
                 prompt.append(
-                    f"- {name}: {value}"
+                    f"- {self._safe(name)}: "
+                    f"{self._safe(value)}"
                 )
 
         # Long-Term Context
@@ -136,7 +152,7 @@ class PromptBuilder:
 
             for item in context.long_term_context:
                 prompt.append(
-                    f"- {item['content']}"
+                    f"- {self._safe(item['content'])}"
                 )
 
         # Cognitive State
@@ -153,20 +169,21 @@ class PromptBuilder:
             if cognitive_state.mindset:
                 prompt.append(
                     f"- Mindset: "
-                    f"{cognitive_state.mindset}"
+                    f"{self._safe(cognitive_state.mindset)}"
                 )
 
             if cognitive_state.emotion:
                 prompt.append(
                     f"- Emotion: "
-                    f"{cognitive_state.emotion}"
+                    f"{self._safe(cognitive_state.emotion)}"
                 )
 
             prompt.append(
                 f"- Source: "
-                f"{cognitive_state.source}"
+                f"{self._safe(cognitive_state.source)}"
             )
 
+        # Cognitive State History
         cognitive_state_history = getattr(
             context,
             "cognitive_state_history",
@@ -178,11 +195,14 @@ class PromptBuilder:
 
             if items:
                 prompt.append("")
-                prompt.append("[COGNITIVE STATE HISTORY]")
+                prompt.append(
+                    "[COGNITIVE STATE HISTORY]"
+                )
 
                 for item in items:
                     prompt.append(
-                        f"- {item.state_type}: {item.value}"
+                        f"- {self._safe(item.state_type)}: "
+                        f"{self._safe(item.value)}"
                     )
 
         # Cognitive State Evolution
@@ -208,9 +228,9 @@ class PromptBuilder:
 
             for evolution in valid_evolutions:
                 prompt.append(
-                    f"- {evolution.state_type}: "
-                    f"{evolution.status}"
-                )  
+                    f"- {self._safe(evolution.state_type)}: "
+                    f"{self._safe(evolution.status)}"
+                )
 
         # Cognitive Behavior
         cognitive_behavior = getattr(
@@ -222,7 +242,9 @@ class PromptBuilder:
         if cognitive_behavior:
             prompt.append("")
             prompt.append("[COGNITIVE BEHAVIOR]")
-            prompt.append(cognitive_behavior)
+            prompt.append(
+                self._safe(cognitive_behavior)
+            )
 
         # Integrated Cognitive Context
         if context.integrated_cognitive_context:
@@ -253,8 +275,8 @@ class PromptBuilder:
 
                 for item in prioritized_items:
                     prompt.append(
-                        f"- {item.category}: "
-                        f"{item.value}"
+                        f"- {self._safe(item.category)}: "
+                        f"{self._safe(item.value)}"
                     )
 
         # Recent Conversation
@@ -264,8 +286,8 @@ class PromptBuilder:
 
             for chat in context.history:
                 prompt.append(
-                    f"{chat['role']}: "
-                    f"{chat['message']}"
+                    f"{self._safe(chat['role'])}: "
+                    f"{self._safe(chat['message'])}"
                 )
 
         # Current User Message
@@ -273,6 +295,8 @@ class PromptBuilder:
         prompt.append("==============================")
         prompt.append("CURRENT USER MESSAGE")
         prompt.append("==============================")
-        prompt.append(context.user_input)
+        prompt.append(
+            self._safe(context.user_input)
+        )
 
         return "\n".join(prompt)

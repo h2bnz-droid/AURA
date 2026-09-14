@@ -768,21 +768,20 @@ Sebuah milestone dianggap selesai apabila:
 ### Latest Completed Sprint
 
 ```text
-Sprint 016 — Cognitive State History
-```
+Sprint 017 — Cognitive State Evolution
 
 ### Latest Verified Regression
 
 ```text
-365 passed
+390 passed
 ```
 
 ### Latest Implementation Git Checkpoint
 
 ```text
-17b77de
+deb3f9e
 
-feat: complete sprint 016 cognitive state history
+feat: complete sprint 017 cognitive state evolution
 ```
 
 ### Latest Documentation Git Checkpoint
