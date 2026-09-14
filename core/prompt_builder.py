@@ -183,7 +183,34 @@ class PromptBuilder:
                 for item in items:
                     prompt.append(
                         f"- {item.state_type}: {item.value}"
-                    )    
+                    )
+
+        # Cognitive State Evolution
+        cognitive_state_evolution = getattr(
+            context,
+            "cognitive_state_evolution",
+            None,
+        )
+
+        valid_evolutions = [
+            evolution
+            for evolution in (
+                cognitive_state_evolution or []
+            )
+            if evolution.status != "unknown"
+        ]
+
+        if valid_evolutions:
+            prompt.append("")
+            prompt.append(
+                "[COGNITIVE STATE EVOLUTION]"
+            )
+
+            for evolution in valid_evolutions:
+                prompt.append(
+                    f"- {evolution.state_type}: "
+                    f"{evolution.status}"
+                )  
 
         # Cognitive Behavior
         cognitive_behavior = getattr(

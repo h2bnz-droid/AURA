@@ -24,6 +24,9 @@ from services.mindset_service import (
     detect_mindset,
 )
 from services.cognitive_state_service import CognitiveStateService
+from services.cognitive_state_evolution_service import (
+    CognitiveStateEvolutionService,
+)
 
 memory_retrieval = MemoryRetrieval()
 integrated_cognitive_context_service = (
@@ -33,6 +36,9 @@ adaptive_personalization_service = (
     AdaptivePersonalizationService()
 )
 cognitive_state_service = CognitiveStateService()
+cognitive_state_evolution_service = (
+    CognitiveStateEvolutionService()
+)
 cognitive_behavior = CognitiveBehavior()
 
 def build_context(user_input: str) -> AuraContext:
@@ -85,6 +91,14 @@ def build_context(user_input: str) -> AuraContext:
         cognitive_state_service.history_context()
     )
 
+    # Cognitive State Evolution
+    context.cognitive_state_evolution = (
+        cognitive_state_evolution_service.analyze(
+            cognitive_state=context.cognitive_state,
+            cognitive_state_history=context.cognitive_state_history,
+        )
+    )
+
     # Cognitive Behavior
     context.cognitive_behavior = cognitive_behavior.build(
         context.cognitive_state
@@ -104,6 +118,12 @@ def build_context(user_input: str) -> AuraContext:
         context.integrated_cognitive_context,
         context.cognitive_state_history,
     )
+
+    _add_cognitive_state_evolution_to_context(
+        context.integrated_cognitive_context,
+        context.cognitive_state_evolution,
+    )
+
     return context
 
 def _normalize_long_term_context_item(item):
@@ -212,5 +232,26 @@ def _add_cognitive_state_history_to_context(
                 source=history_item.source,
                 confidence=history_item.confidence,
                 relevance=0.5,
+            )
+        )
+
+def _add_cognitive_state_evolution_to_context(
+    integrated_context,
+    cognitive_state_evolution,
+):
+    if cognitive_state_evolution is None:
+        return
+
+    for evolution in cognitive_state_evolution:
+        if evolution.status == "unknown":
+            continue
+
+        integrated_context.recent.append(
+            CognitiveContextItem(
+                category=f"{evolution.state_type}_evolution",
+                value=evolution.status,
+                source="cognitive_state_evolution",
+                confidence=1.0,
+                relevance=0.6,
             )
         )
