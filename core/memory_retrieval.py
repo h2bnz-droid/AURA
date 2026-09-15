@@ -49,16 +49,19 @@ class MemoryRetrieval:
                 seen.add(value)
                 unique.append(memory)
 
+        scored = [
+            (memory, self.score(user_input, memory))
+            for memory in unique
+        ]
+
         ranked = sorted(
-            unique,
-            key=lambda memory: self.score(user_input, memory),
+            scored,
+            key=lambda item: item[1],
             reverse=True,
         )
 
-        ranked = [
+        return [
             memory
-            for memory in ranked
-            if self.score(user_input, memory) > 0
-        ]
-
-        return ranked[:self.MAX_RESULTS]
+            for memory, score in ranked
+            if score > 0
+        ][:self.MAX_RESULTS]
