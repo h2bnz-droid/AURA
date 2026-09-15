@@ -14,6 +14,16 @@ def create_table():
     );
     """)
 
+    cursor.execute("""
+    CREATE INDEX IF NOT EXISTS idx_memories_key
+    ON memories(memory_key);
+    """)
+
+    cursor.execute("""
+    CREATE INDEX IF NOT EXISTS idx_memories_value
+    ON memories(memory_value);
+    """)
+
     conn.commit()
     conn.close()
 
