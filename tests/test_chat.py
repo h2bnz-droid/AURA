@@ -51,3 +51,44 @@ def test_ask_handles_empty_context(
 
     assert result == "Halo!"
     mock_chat.assert_called_once()
+
+@patch("core.chat.chat")
+@patch("core.chat.add")
+@patch("core.chat.build_context")
+def test_ask_returns_answer_when_user_storage_fails(
+    mock_build_context,
+    mock_add,
+    mock_chat,
+):
+    mock_build_context.return_value = AuraContext("Halo")
+    mock_chat.return_value = "Halo juga!"
+
+    mock_add.side_effect = RuntimeError(
+        "database unavailable"
+    )
+
+    result = ask("Halo")
+
+    assert result == "Halo juga!"
+
+
+@patch("core.chat.chat")
+@patch("core.chat.add")
+@patch("core.chat.build_context")
+def test_ask_returns_answer_when_aura_storage_fails(
+    mock_build_context,
+    mock_add,
+    mock_chat,
+):
+    mock_build_context.return_value = AuraContext("Halo")
+    mock_chat.return_value = "Halo juga!"
+
+    def fail_on_aura(role, message):
+        if role == "AURA":
+            raise RuntimeError("database unavailable")
+
+    mock_add.side_effect = fail_on_aura
+
+    result = ask("Halo")
+
+    assert result == "Halo juga!"

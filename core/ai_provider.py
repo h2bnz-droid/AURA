@@ -4,6 +4,11 @@ import ollama
 
 from core.config import MODEL
 from core.security import redact_sensitive_data
+from core.reliability import (
+    RetryExhaustedError,
+    run_with_retry,
+)
+from core.fallback import get_fallback_response
 
 
 class AIProviderError(RuntimeError):
@@ -13,15 +18,20 @@ class AIProviderError(RuntimeError):
 def chat(messages):
     safe_messages = _sanitize_messages(messages)
 
-    try:
-        response = ollama.chat(
+    def request():
+        return ollama.chat(
             model=MODEL,
             messages=safe_messages,
         )
-    except Exception as exc:
-        raise AIProviderError(
-            "AI provider failed to generate a response."
-        ) from exc
+
+    try:
+        response = run_with_retry(
+            request,
+            max_retries=2,
+            backoff_seconds=0,
+        )
+    except RetryExhaustedError:
+        return get_fallback_response()
 
     if not isinstance(response, dict):
         raise AIProviderError(

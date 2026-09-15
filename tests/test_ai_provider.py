@@ -4,7 +4,7 @@ from core.ai_provider import AIProviderError, chat
 from core.ai_provider import _sanitize_messages
 
 
-def test_provider_error_is_wrapped(monkeypatch):
+def test_provider_error_returns_fallback(monkeypatch):
     def failing_chat(**kwargs):
         raise RuntimeError("connection failed")
 
@@ -13,8 +13,19 @@ def test_provider_error_is_wrapped(monkeypatch):
         failing_chat,
     )
 
-    with pytest.raises(AIProviderError):
-        chat([])
+    result = chat(
+        [
+            {
+                "role": "user",
+                "content": "hello",
+            }
+        ]
+    )
+
+    assert result
+    assert "ollama" not in result.lower()
+    assert "exception" not in result.lower()
+    assert "traceback" not in result.lower()
 
 
 def test_invalid_response_type_is_rejected(monkeypatch):
@@ -138,3 +149,27 @@ def test_sanitize_messages_rejects_invalid_messages():
         raise AssertionError(
             "Expected AIProviderError"
         )
+
+def test_chat_returns_fallback_when_provider_fails(monkeypatch):
+    from core.ai_provider import chat
+
+    def failing_chat(**kwargs):
+        raise RuntimeError("provider unavailable")
+
+    monkeypatch.setattr(
+        "core.ai_provider.ollama.chat",
+        failing_chat,
+    )
+
+    result = chat(
+        [
+            {
+                "role": "user",
+                "content": "hello",
+            }
+        ]
+    )
+
+    assert result
+    assert "ollama" not in result.lower()
+    assert "exception" not in result.lower()

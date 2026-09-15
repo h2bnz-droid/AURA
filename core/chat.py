@@ -6,6 +6,7 @@ from core.security import (
     redact_sensitive_data,
     validate_user_input,
 )
+from core.reliability import run_with_fallback
 
 from services.conversation_service import add
 
@@ -20,7 +21,10 @@ def ask(user_message: str):
     safe_user_message = redact_sensitive_data(user_message)
 
     # Simpan pesan pengguna yang sudah disanitasi
-    add("User", safe_user_message)
+    run_with_fallback(
+        lambda: add("User", safe_user_message),
+        None,
+    )
 
     # Bangun context
     context = build_context(safe_user_message)
@@ -59,6 +63,9 @@ def ask(user_message: str):
     answer = chat(messages)
 
     # Simpan jawaban AURA
-    add("AURA", answer)
+    run_with_fallback(
+        lambda: add("AURA", answer),
+        None,
+    )
 
     return answer
